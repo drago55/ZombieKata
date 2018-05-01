@@ -1,3 +1,5 @@
+import Items.Item;
+
 import java.util.Vector;
 
 public class Equipment {
@@ -10,5 +12,9 @@ public class Equipment {
 
     public int getCapacity() throws ClassCastException {
         return equipments.capacity();
+    }
+
+    public void addEquipment(Item e) {
+        this.equipments.add(e);
     }
 }
