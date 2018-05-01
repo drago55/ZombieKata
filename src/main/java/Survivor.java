@@ -3,12 +3,14 @@ public class Survivor {
     private String name;
     private Wounds wounds;
     private static Actions actions;
+    private Equipment equipment;
 
 
     public Survivor(String name) {
         this.name = name;
         wounds = new Wounds();
         actions = Actions.getInstance();
+        equipment = new Equipment();
     }
 
     public String getName() {
@@ -36,6 +38,6 @@ public class Survivor {
     }
 
     public int getEquipmentRemainingCapacity() {
-        return equipmentRemainingCapacity;
+        return equipment.getCapacity();
     }
 }
