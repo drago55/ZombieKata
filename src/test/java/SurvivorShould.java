@@ -46,4 +46,31 @@ public class SurvivorShould {
         //Then
         Assertions.assertEquals(wound, bob.getWounds());
     }
+
+    @Test
+    public void perform_three_action_per_turn() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        bob.performAction();
+        bob.performAction();
+        bob.performAction();
+
+        int remainingActions = 0;
+        //Then
+        Assertions.assertEquals(remainingActions, bob.getRemainingActions());
+    }
+
+    @Test
+    public void survivor_can_carry_equipment_with_capacity_of_five() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+
+        int remainingCapacity = 5;
+        //Then
+        Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
+    }
+
+
 }
