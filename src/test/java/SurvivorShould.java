@@ -1,13 +1,11 @@
 import Items.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+        import org.junit.jupiter.api.Assertions;
+        import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+        import java.util.HashSet;
+        import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+        import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SurvivorShould {
 
@@ -142,18 +140,51 @@ public class SurvivorShould {
         //Given
         Survivor bob = new Survivor("Bob");
         //When
-        bob.pickUpItem(new Sword("Katana"));
-        bob.pickUpItem(new BaseballBat("Strong baseball Bat"));
-        bob.pickUpItem(new FryingPan("A pan"));
-        bob.pickUpItem(new Pistol("9mm"));
-        bob.pickUpItem(new BottledWater("Large water"));
+        Item sword = new Sword("Katana");
+        Item bat = new BaseballBat("Strong baseball Bat");
+        Item pan = new FryingPan("A pan");
+        Item pistol = new Pistol("9mm");
+        Item molotov = new Molotov("High explosive molotov");
 
-
-        int remainingCapacity = 0;
+        bob.pickUpItem(sword);
+        bob.pickUpItem(bat);
+        bob.pickUpItem(pan);
+        bob.pickUpItem(pistol);
+        bob.pickUpItem(molotov);
+        bob.equip(sword);
+        bob.equip(pistol);
+        Set<Item> expectedInHand = new HashSet<>();
+        expectedInHand.add(sword);
+        expectedInHand.add(pistol);
 
         //Then
-        Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
+        Assertions.assertEquals(expectedInHand, bob.getEquippedItems());
     }
 
+    @Test
+    public void equip_only_two_items() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        Item sword = new Sword("Katana");
+        Item bat = new BaseballBat("Strong baseball Bat");
+        Item pan = new FryingPan("A pan");
+        Item pistol = new Pistol("9mm");
+        Item molotov = new Molotov("High explosive molotov");
+
+        bob.pickUpItem(sword);
+        bob.pickUpItem(bat);
+        bob.pickUpItem(pan);
+        bob.pickUpItem(pistol);
+        bob.pickUpItem(molotov);
+        bob.equip(sword);
+        bob.equip(pistol);
+        bob.equip(molotov);
+
+        Set<Item> expectedEquippedItem = new HashSet<>();
+        expectedEquippedItem.add(pistol);
+        expectedEquippedItem.add(molotov);
+        Assertions.assertEquals(expectedEquippedItem, bob.getEquippedItems());
+    }
 
 }

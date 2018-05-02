@@ -1,12 +1,11 @@
 import Items.Item;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Equipment {
 
     public static final int OUT_OF_SPACE = -1;
+    private static final boolean EQUIPPED = true;
     private Item[] equipments;
     private int capacity = 5;
 
@@ -35,7 +34,11 @@ public class Equipment {
         return getCurrentCapacity() == 0 ? OUT_OF_SPACE : getCurrentCapacity() - 1;
     }
 
-    public Set<Item> getItems() {
-        return Arrays.asList(equipments).stream().filter((item) -> item != null).collect(Collectors.toSet());
+    public Stream<Item> getItems() {
+        return Stream.of(equipments).filter((item) -> item != null);
+    }
+
+    public Stream<Item> getEquippedItems() {
+        return getItems().filter((Item item) -> item.isEquipped() == EQUIPPED);
     }
 }

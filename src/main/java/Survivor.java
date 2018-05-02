@@ -1,9 +1,8 @@
 import Items.Item;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Survivor {
 
@@ -11,7 +10,6 @@ public class Survivor {
     private Wounds wounds;
     private static Actions actions;
     private Equipment equipment;
-    private Set<Item> inHand;
 
 
     public Survivor(String name) {
@@ -19,7 +17,6 @@ public class Survivor {
         wounds = new Wounds();
         actions = Actions.getInstance();
         equipment = new Equipment();
-        inHand = new HashSet<>();
     }
 
 
@@ -53,9 +50,28 @@ public class Survivor {
 
     public void pickUpItem(Item item) {
         equipment.addEquipment(item);
+
     }
 
     public Set<Item> getItemList() {
-        return equipment.getItems();
+        return equipment.getItems().collect(Collectors.toSet());
+    }
+
+    public Set<Item> getEquippedItems() {
+        return equipment.getEquippedItems().collect(Collectors.toSet());
+
+    }
+
+    public void equip(Item item) {
+        Optional<Item> optionalOfItem = getItemFromEquipment(item);
+        if (optionalOfItem.isPresent()) {
+
+
+            optionalOfItem.get().equipItem();
+        }
+    }
+
+    private Optional<Item> getItemFromEquipment(Item itemToEquip) {
+        return equipment.getItems().filter(item -> item == itemToEquip && !itemToEquip.isEquipped()).findAny();
     }
 }

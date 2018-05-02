@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Item {
 
     private String name;
+    private boolean isEquipped = false;
 
     public Item(String name) {
         this.name = name;
@@ -22,5 +23,13 @@ public class Item {
     public int hashCode() {
 
         return Objects.hash(name);
+    }
+
+    public boolean isEquipped() {
+        return isEquipped;
+    }
+
+    public void equipItem() {
+        this.isEquipped = true;
     }
 }
