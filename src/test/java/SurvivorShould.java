@@ -1,5 +1,8 @@
+import Items.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SurvivorShould {
 
@@ -30,7 +33,6 @@ public class SurvivorShould {
         Survivor bob = new Survivor("Bob");
         //When
         bob.receiveWound(3);
-
         //Then
         Assertions.assertTrue(bob.isDead());
     }
@@ -68,6 +70,39 @@ public class SurvivorShould {
         //When
 
         int remainingCapacity = 5;
+        //Then
+        Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
+    }
+
+    @Test
+    public void pickup_item_throws_exception() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        bob.pickUpItem(new Sword("Katana"));
+        bob.pickUpItem(new BaseballBat("Strong baseball Bat"));
+        bob.pickUpItem(new FryingPan("A pan"));
+        bob.pickUpItem(new Pistol("9mm"));
+        bob.pickUpItem(new BottledWater("Large water"));
+
+        //Then
+        assertThrows(IllegalStateException.class, () ->
+                bob.pickUpItem(new Molotov("High explosive molotov")), "There is no more space");
+    }
+
+    @Test
+    public void survivor_can_pickup_item() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        bob.pickUpItem(new Sword("Katana"));
+        bob.pickUpItem(new BaseballBat("Strong baseball Bat"));
+        bob.pickUpItem(new FryingPan("A pan"));
+        bob.pickUpItem(new Pistol("9mm"));
+        bob.pickUpItem(new BottledWater("Large water"));
+
+        int remainingCapacity = 0;
+
         //Then
         Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
     }

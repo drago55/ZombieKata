@@ -1,9 +1,15 @@
+import Items.Item;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Survivor {
 
     private String name;
     private Wounds wounds;
     private static Actions actions;
     private Equipment equipment;
+    private List<Item> inHand;
 
 
     public Survivor(String name) {
@@ -11,7 +17,9 @@ public class Survivor {
         wounds = new Wounds();
         actions = Actions.getInstance();
         equipment = new Equipment();
+        inHand = new ArrayList<>();
     }
+
 
     public String getName() {
         return name;
@@ -38,6 +46,10 @@ public class Survivor {
     }
 
     public int getEquipmentRemainingCapacity() {
-        return equipment.getCapacity();
+        return equipment.getCurrentCapacity();
+    }
+
+    public void pickUpItem(Item item) {
+        equipment.addEquipment(item);
     }
 }

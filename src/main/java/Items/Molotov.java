@@ -1,7 +1,7 @@
 package Items;
 
 public class Molotov extends Item {
-    public Molotov() {
-
+    public Molotov(String name) {
+        super(name);
     }
 }
