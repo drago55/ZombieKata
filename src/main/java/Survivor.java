@@ -1,6 +1,7 @@
 import Items.Item;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class Survivor {
     private Wounds wounds;
     private static Actions actions;
     private Equipment equipment;
-    private List<Item> inHand;
+    private Set<Item> inHand;
 
 
     public Survivor(String name) {
@@ -18,7 +19,7 @@ public class Survivor {
         wounds = new Wounds();
         actions = Actions.getInstance();
         equipment = new Equipment();
-        inHand = new ArrayList<>();
+        inHand = new HashSet<>();
     }
 
 
