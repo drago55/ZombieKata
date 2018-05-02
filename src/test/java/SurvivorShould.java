@@ -2,6 +2,11 @@ import Items.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SurvivorShould {
@@ -64,7 +69,7 @@ public class SurvivorShould {
     }
 
     @Test
-    public void survivor_can_carry_equipment_with_capacity_of_five() {
+    public void carry_equipment_with_capacity_of_five() {
         //Given
         Survivor bob = new Survivor("Bob");
         //When
@@ -75,7 +80,7 @@ public class SurvivorShould {
     }
 
     @Test
-    public void pickup_item_throws_exception() {
+    public void pickup_item_method_throws_exception() {
         //Given
         Survivor bob = new Survivor("Bob");
         //When
@@ -91,7 +96,7 @@ public class SurvivorShould {
     }
 
     @Test
-    public void survivor_can_pickup_item() {
+    public void pickup_item() {
         //Given
         Survivor bob = new Survivor("Bob");
         //When
@@ -100,6 +105,49 @@ public class SurvivorShould {
         bob.pickUpItem(new FryingPan("A pan"));
         bob.pickUpItem(new Pistol("9mm"));
         bob.pickUpItem(new BottledWater("Large water"));
+
+        int remainingCapacity = 0;
+
+        //Then
+        Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
+    }
+
+    @Test
+    public void have_items_in_equipment() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        Item sword = new Sword("Katana");
+        Item bat = new BaseballBat("Strong baseball Bat");
+        Item pan = new FryingPan("A pan");
+        Item pistol = new Pistol("9mm");
+        Item molotov = new Molotov("High explosive molotov");
+        bob.pickUpItem(sword);
+        bob.pickUpItem(bat);
+        bob.pickUpItem(pan);
+        bob.pickUpItem(pistol);
+        bob.pickUpItem(molotov);
+
+        Set<Item> expected = new HashSet<>();
+        expected.add(sword);
+        expected.add(bat);
+        expected.add(pan);
+        expected.add(pistol);
+        expected.add(molotov);
+        Assertions.assertEquals(expected, bob.getItemList());
+    }
+
+    @Test
+    public void equip_in_hand_available_item() {
+        //Given
+        Survivor bob = new Survivor("Bob");
+        //When
+        bob.pickUpItem(new Sword("Katana"));
+        bob.pickUpItem(new BaseballBat("Strong baseball Bat"));
+        bob.pickUpItem(new FryingPan("A pan"));
+        bob.pickUpItem(new Pistol("9mm"));
+        bob.pickUpItem(new BottledWater("Large water"));
+
 
         int remainingCapacity = 0;
 

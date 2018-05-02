@@ -1,5 +1,9 @@
 import Items.Item;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class Equipment {
 
     public static final int OUT_OF_SPACE = -1;
@@ -21,12 +25,6 @@ public class Equipment {
     }
 
     public void addEquipment(Item item) {
-        System.out.println("------------------------------");
-        System.out.println("Capacity of array is " + capacity);
-        System.out.println("Capacity is " + getCurrentCapacity());
-        System.out.println("Next available index " + getNextAvailableIndex());
-        System.out.println("------------------------------");
-
         if (getNextAvailableIndex() == OUT_OF_SPACE) {
             throw new IllegalStateException("There is no more space");
         }
@@ -35,5 +33,9 @@ public class Equipment {
 
     private int getNextAvailableIndex() {
         return getCurrentCapacity() == 0 ? OUT_OF_SPACE : getCurrentCapacity() - 1;
+    }
+
+    public Set<Item> getItems() {
+        return Arrays.asList(equipments).stream().filter((item) -> item != null).collect(Collectors.toSet());
     }
 }

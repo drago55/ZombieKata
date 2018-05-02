@@ -2,6 +2,7 @@ import Items.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Survivor {
 
@@ -51,5 +52,9 @@ public class Survivor {
 
     public void pickUpItem(Item item) {
         equipment.addEquipment(item);
+    }
+
+    public Set<Item> getItemList() {
+        return equipment.getItems();
     }
 }
