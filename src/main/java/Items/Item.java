@@ -2,10 +2,9 @@ package Items;
 
 import java.util.Objects;
 
-public class Item{
+public class Item {
 
     private String name;
-    private boolean isEquipped = false;
 
     public Item(String name) {
         this.name = name;
@@ -24,18 +23,5 @@ public class Item{
 
         return Objects.hash(name);
     }
-
-    public boolean isEquipped() {
-        return isEquipped;
-    }
-
-    public void equipItem() {
-        this.isEquipped = true;
-    }
-
-    public void reserve() {
-        this.isEquipped = false;
-    }
-
 
 }

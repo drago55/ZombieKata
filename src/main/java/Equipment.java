@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 public class Equipment {
 
     public static final int OUT_OF_SPACE = -1;
-    private static final boolean EQUIPPED = true;
     private Item[] equipments;
     private int capacity = 5;
 
@@ -38,7 +37,4 @@ public class Equipment {
         return Stream.of(equipments).filter((item) -> item != null);
     }
 
-    public Stream<Item> getEquippedItems() {
-        return getItems().filter((Item item) -> item.isEquipped() == EQUIPPED);
-    }
 }

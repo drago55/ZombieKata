@@ -89,6 +89,6 @@ public class Survivor {
     }
 
     private Optional<Item> getItemFromEquipment(Item itemToEquip) {
-        return getItemList().stream().filter(item -> item == itemToEquip && !itemToEquip.isEquipped()).findAny();
+        return getItemList().stream().filter(item -> item == itemToEquip).findAny();
     }
 }
