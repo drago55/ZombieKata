@@ -1,7 +1,6 @@
 import Items.Item;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Survivor {
@@ -10,6 +9,7 @@ public class Survivor {
     private Wounds wounds;
     private static Actions actions;
     private Equipment equipment;
+    private List<Item> inHand;
 
 
     public Survivor(String name) {
@@ -17,6 +17,7 @@ public class Survivor {
         wounds = new Wounds();
         actions = Actions.getInstance();
         equipment = new Equipment();
+        inHand = new ArrayList<>();
     }
 
 
@@ -57,21 +58,37 @@ public class Survivor {
         return equipment.getItems().collect(Collectors.toSet());
     }
 
-    public Set<Item> getEquippedItems() {
-        return equipment.getEquippedItems().collect(Collectors.toSet());
-
+    public List<Item> getEquippedItems() {
+        return this.inHand;
     }
 
     public void equip(Item item) {
         Optional<Item> optionalOfItem = getItemFromEquipment(item);
         if (optionalOfItem.isPresent()) {
+            if (inHand.size() == 2) {
+                unEquipFirst();
+            }
+            inHand.add(optionalOfItem.get());
+        }
+    }
 
+    private void unEquipFirst() {
+        if (!inHand.isEmpty()) {
+            inHand.remove(0);
+        }
+    }
 
-            optionalOfItem.get().equipItem();
+    public void unEquipAll() {
+        inHand.clear();
+    }
+
+    private void unEquipLast() {
+        if (!inHand.isEmpty()) {
+            inHand.remove(1);
         }
     }
 
     private Optional<Item> getItemFromEquipment(Item itemToEquip) {
-        return equipment.getItems().filter(item -> item == itemToEquip && !itemToEquip.isEquipped()).findAny();
+        return getItemList().stream().filter(item -> item == itemToEquip && !itemToEquip.isEquipped()).findAny();
     }
 }

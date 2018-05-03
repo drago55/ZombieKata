@@ -1,11 +1,10 @@
 import Items.*;
-        import org.junit.jupiter.api.Assertions;
-        import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-        import java.util.HashSet;
-        import java.util.Set;
+import java.util.*;
 
-        import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SurvivorShould {
 
@@ -153,7 +152,7 @@ public class SurvivorShould {
         bob.pickUpItem(molotov);
         bob.equip(sword);
         bob.equip(pistol);
-        Set<Item> expectedInHand = new HashSet<>();
+        List<Item> expectedInHand = new ArrayList<>();
         expectedInHand.add(sword);
         expectedInHand.add(pistol);
 
@@ -177,14 +176,18 @@ public class SurvivorShould {
         bob.pickUpItem(pan);
         bob.pickUpItem(pistol);
         bob.pickUpItem(molotov);
-        bob.equip(sword);
+
         bob.equip(pistol);
         bob.equip(molotov);
-
-        Set<Item> expectedEquippedItem = new HashSet<>();
-        expectedEquippedItem.add(pistol);
-        expectedEquippedItem.add(molotov);
+        bob.equip(molotov);
+        bob.equip(pistol);
+        bob.equip(bat);
+        bob.equip(sword);
+        List<Item> expectedEquippedItem = new ArrayList<>();
+        expectedEquippedItem.add(bat);
+        expectedEquippedItem.add(sword);
         Assertions.assertEquals(expectedEquippedItem, bob.getEquippedItems());
+
     }
 
 }

@@ -2,7 +2,7 @@ package Items;
 
 import java.util.Objects;
 
-public class Item {
+public class Item{
 
     private String name;
     private boolean isEquipped = false;
@@ -32,4 +32,10 @@ public class Item {
     public void equipItem() {
         this.isEquipped = true;
     }
+
+    public void reserve() {
+        this.isEquipped = false;
+    }
+
+
 }
