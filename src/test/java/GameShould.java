@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GameShould {
 
@@ -32,23 +33,16 @@ public class GameShould {
         //Given
         Game game = new Game();
         //When
-        game.addSurvivor();
-        game.addSurvivor();
-        game.addSurvivor();
-
-        Set<String> containsSurvivors = game.getSurvivorsNames();
-
-        //Given
-        //When
-        game.addSurvivor();
-        game.addSurvivor();
-        game.addSurvivor();
-
-        //  Set<String> containsSurvivors = game.getSurvivorsNames();
-
-
+        for (int i = 0; i < 30; i++) {
+            game.addSurvivor();
+        }
+        Set<String> containsUniqueNames = game.getSurvivorsNames().stream().distinct().collect(Collectors.toSet());
+        System.out.println("Unique names " + containsUniqueNames);
+        System.out.println("-------------------------------------");
+        System.out.println("survivors names " + game.getSurvivorsNames());
+        System.out.println("generated survivors " + game.getSurvivorsCount());
         //Then
-        Assertions.assertEquals(containsSurvivors, game.getSurvivorsNames());
+        Assertions.assertEquals(containsUniqueNames, game.getSurvivorsNames());
 
     }
 
