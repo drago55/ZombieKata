@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import survivors.Survivor;
+import survivors.ZombieSurvivor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class SurvivorShould {
     @BeforeEach
     public void init() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         sword = new Sword("Katana");
         bat = new BaseballBat("Strong baseball Bat");
@@ -44,7 +45,7 @@ public class SurvivorShould {
     @Test
     public void have_name() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //Then
         Assertions.assertEquals("Bob", bob.getName());
     }
@@ -52,7 +53,7 @@ public class SurvivorShould {
     @Test
     public void have_zero_wounds() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         int wounds = 0;
         //Then
@@ -62,7 +63,7 @@ public class SurvivorShould {
     @Test
     public void received_two_wounds() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         bob.receiveWound(3);
         //Then
@@ -72,7 +73,7 @@ public class SurvivorShould {
     @Test
     public void additional_wounds_are_ignored() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         bob.receiveWound(2);
         bob.receiveWound(1);
@@ -84,7 +85,7 @@ public class SurvivorShould {
     @Test
     public void perform_three_action_per_turn() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         bob.performAction();
         bob.performAction();
@@ -98,7 +99,7 @@ public class SurvivorShould {
     @Test
     public void carry_equipment_with_capacity_of_five() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
 
         int remainingCapacity = 5;
@@ -109,7 +110,7 @@ public class SurvivorShould {
     @Test
     public void pickup_item_method_throws_exception() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         bob.pickUpItem(sword);
         bob.pickUpItem(bat);
@@ -125,7 +126,7 @@ public class SurvivorShould {
     @Test
     public void pickup_item() {
         //Given
-        bob = new Survivor("Bob");
+        bob = new ZombieSurvivor();
         //When
         bob.pickUpItem(sword);
         bob.pickUpItem(bat);
@@ -183,7 +184,7 @@ public class SurvivorShould {
     @Test
     public void wound_reduce_carrying_capacity() {
         //Given
-        Survivor bob = new Survivor("Bob");
+        Survivor bob = new ZombieSurvivor();
         //When
         bob.receiveWound(1);
         int remainingCapacity = 4;

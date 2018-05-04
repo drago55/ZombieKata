@@ -2,89 +2,40 @@ package survivors;
 
 import Items.Item;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-public class Survivor {
+public interface Survivor {
 
-    private String name;
-    private Wounds wounds;
-    private static Actions actions;
-    private Equipment equipment;
-    private List<Item> inHand;
+    String getName();
 
+    void setName(String name);
 
-    public Survivor(String name) {
-        this.name = name;
-        wounds = new Wounds();
-        actions = Actions.getInstance();
-        equipment = new Equipment();
-        inHand = new ArrayList<>();
-    }
+    int getWounds();
 
-    public String getName() {
-        return name;
-    }
+    void receiveWound(int i);
 
-    public int getWounds() {
-        return this.wounds.getWounds();
-    }
+    boolean isDead();
 
-    public void receiveWound(int i) {
-        wounds.receive(i);
-        equipment.reduceCapacityAndDropItem();
-    }
+    void performAction();
 
-    public boolean isDead() {
-        return wounds.getWounds() == 2;
-    }
+    int getRemainingActions();
 
-    public void performAction() {
-        this.actions.doAction();
-    }
+    int getEquipmentRemainingCapacity();
 
-    public int getRemainingActions() {
-        return actions.getRemaining();
-    }
+    void pickUpItem(Item item);
 
-    public int getEquipmentRemainingCapacity() {
-        return equipment.getEquipmentFreeSlots();
-    }
+    Set<Item> getItemList();
 
-    public void pickUpItem(Item item) {
-        equipment.addEquipment(item);
+    List<Item> getEquippedItems();
 
-    }
+    void equip(Item item);
 
-    public Set<Item> getItemList() {
-        return equipment.getItems().collect(Collectors.toSet());
-    }
+    void unEquipFirst();
 
-    public List<Item> getEquippedItems() {
-        return this.inHand;
-    }
+    Optional<Item> getItemFromEquipment(Item itemToEquip);
 
-    public void equip(Item item) {
-        Optional<Item> optionalOfItem = getItemFromEquipment(item);
-        if (optionalOfItem.isPresent()) {
-            if (inHand.size() == 2) {
-                unEquipFirst();
-            }
-            inHand.add(optionalOfItem.get());
-        }
-    }
+    void kill();
 
-    private void unEquipFirst() {
-        if (!inHand.isEmpty()) {
-            inHand.remove(0);
-        }
-    }
-
-    private Optional<Item> getItemFromEquipment(Item itemToEquip) {
-        return getItemList().stream().filter(item -> item == itemToEquip).findAny();
-    }
-
-    public void kill() {
-        this.wounds.receive(2);
-    }
 }
