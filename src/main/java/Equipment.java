@@ -1,5 +1,7 @@
 import Items.Item;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Equipment {
@@ -12,7 +14,7 @@ public class Equipment {
         equipments = new Item[capacity];
     }
 
-    public int getCurrentCapacity() {
+    public int getEquipmentFreeSlots() {
         int currentCapacity = 0;
         for (Item item : equipments) {
             if (item == null) {
@@ -30,11 +32,17 @@ public class Equipment {
     }
 
     private int getNextAvailableIndex() {
-        return getCurrentCapacity() == 0 ? OUT_OF_SPACE : getCurrentCapacity() - 1;
+        return getEquipmentFreeSlots() == 0 ? OUT_OF_SPACE : getEquipmentFreeSlots() - 1;
     }
 
     public Stream<Item> getItems() {
         return Stream.of(equipments).filter((item) -> item != null);
+    }
+
+    public void reduceCapacityAndDropItem() {
+        Set<Item> dropOne = getItems().skip(1).collect(Collectors.toSet());
+        this.equipments = new Item[capacity -= 1];
+        dropOne.toArray(equipments);
     }
 
 }

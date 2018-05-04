@@ -20,7 +20,6 @@ public class Survivor {
         inHand = new ArrayList<>();
     }
 
-
     public String getName() {
         return name;
     }
@@ -31,6 +30,7 @@ public class Survivor {
 
     public void receiveWound(int i) {
         wounds.receive(i);
+        equipment.reduceCapacityAndDropItem();
     }
 
     public boolean isDead() {
@@ -46,7 +46,7 @@ public class Survivor {
     }
 
     public int getEquipmentRemainingCapacity() {
-        return equipment.getCurrentCapacity();
+        return equipment.getEquipmentFreeSlots();
     }
 
     public void pickUpItem(Item item) {
@@ -75,16 +75,6 @@ public class Survivor {
     private void unEquipFirst() {
         if (!inHand.isEmpty()) {
             inHand.remove(0);
-        }
-    }
-
-    public void unEquipAll() {
-        inHand.clear();
-    }
-
-    private void unEquipLast() {
-        if (!inHand.isEmpty()) {
-            inHand.remove(1);
         }
     }
 
