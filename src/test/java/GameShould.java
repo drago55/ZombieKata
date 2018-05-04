@@ -1,7 +1,7 @@
+import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +20,7 @@ public class GameShould {
     @Test
     public void add_survivors() {
         //Given
-        Game game = new Game();
+        Game game = new Game(new BasicNames());
         //When
         game.addSurvivor();
         int containsSurvivors = 1;
@@ -31,7 +31,7 @@ public class GameShould {
     @Test
     public void survivors_names_are_unique() {
         //Given
-        Game game = new Game();
+        Game game = new Game(new BasicNames());
         //When
         for (int i = 0; i < 20; i++) {
             game.addSurvivor();
@@ -44,7 +44,7 @@ public class GameShould {
     @Test
     public void game_ends_if_remaining_survivors_are_dead() {
         //Given
-        Game game = new Game();
+        Game game = new Game(new BasicNames());
         //When
         game.addSurvivor();
         game.addSurvivor();

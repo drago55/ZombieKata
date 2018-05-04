@@ -2,6 +2,7 @@ import Items.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import survivors.Survivor;
 
 import java.util.ArrayList;
 import java.util.HashSet;

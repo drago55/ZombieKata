@@ -2,7 +2,7 @@ package Items;
 
 import java.util.Objects;
 
-public class Item {
+public abstract class Item {
 
     private String name;
 

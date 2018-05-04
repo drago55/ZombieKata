@@ -1,23 +1,12 @@
+package names;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
-public class Names {
-
+public class NameConstants {
     private static List<String> listOfAvailableNames;
 
-    public Names() {
-        this.listOfAvailableNames = initListOfAvailableNames();
-    }
-
-    public static Optional<String> getNameAndUpdateList() {
-        Optional<String> name = listOfAvailableNames.stream().skip(ThreadLocalRandom.current().nextInt(listOfAvailableNames.size())).findFirst();
-        listOfAvailableNames.removeIf((availableName) -> availableName.matches(name.get()));
-        return name;
-    }
-
-    private static List<String> initListOfAvailableNames() {
+    public static List<String> initListOfAvailableNames() {
         listOfAvailableNames = new ArrayList<>();
         listOfAvailableNames.add("Spencer");
         listOfAvailableNames.add("Maximo");

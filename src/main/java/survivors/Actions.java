@@ -1,3 +1,5 @@
+package survivors;
+
 public class Actions {
 
     private int remaining = 3;

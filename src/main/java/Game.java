@@ -1,3 +1,7 @@
+import names.BasicNames;
+import names.Names;
+import survivors.Survivor;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -11,7 +15,11 @@ public class Game {
     private Names names;
 
     public Game() {
-        this.names = new Names();
+
+    }
+
+    public Game(Names names) {
+        this.names = names;
     }
 
     public int getSurvivorsCount() {
@@ -19,12 +27,12 @@ public class Game {
     }
 
     public void addSurvivor() {
-        survivor = new Survivor(getNameFromList());
+        this.survivor = new Survivor(getNameFromList());
         survivors.add(survivor);
     }
 
     private String getNameFromList() throws IllegalStateException {
-        Optional<String> optionalOfName = Names.getNameAndUpdateList();
+        Optional<String> optionalOfName = names.getNameAndUpdateList();
         if (getSurvivorsCount() == 20 && !optionalOfName.isPresent()) {
             throw new IllegalStateException("No more names to assign! can't generate anymore survivors");
         }

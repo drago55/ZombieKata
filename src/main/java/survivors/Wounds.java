@@ -1,3 +1,5 @@
+package survivors;
+
 public class Wounds {
 
     private int wounds = 0;
