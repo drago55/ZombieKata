@@ -8,8 +8,10 @@ public class Game {
     private boolean gameEnded = false;
     private Survivor survivor;
     private Set<Survivor> survivors = new HashSet<>();
+    private Names names;
 
     public Game() {
+        this.names = new Names();
     }
 
     public int getSurvivorsCount() {
@@ -17,27 +19,16 @@ public class Game {
     }
 
     public void addSurvivor() {
-        survivor = new Survivor(generateUniqueName());
+        survivor = new Survivor(getNameFromList());
         survivors.add(survivor);
     }
 
-    private String generateUniqueName() throws IllegalStateException {
-        Optional<String> optionalOfName = Names.getName();
-        String name = optionalOfName.get();
-        System.out.println("survivors " + getSurvivorsCount());
-        System.out.println("names " + name);
-        System.out.println("IS name unique " + isNameUnique(name));
-        if (getSurvivorsCount() == 30) {
+    private String getNameFromList() throws IllegalStateException {
+        Optional<String> optionalOfName = Names.getNameAndUpdateList();
+        if (getSurvivorsCount() == 20 && !optionalOfName.isPresent()) {
             throw new IllegalStateException("No more names to assign! can't generate anymore survivors");
         }
-        if (isNameUnique(name)) {
-            return name;
-        }
-        return generateUniqueName();
-    }
-
-    private boolean isNameUnique(String name) {
-        return !getSurvivorsNames().contains(name);
+        return optionalOfName.get();
     }
 
     public Set<String> getSurvivorsNames() {
