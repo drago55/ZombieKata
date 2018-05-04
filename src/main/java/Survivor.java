@@ -81,4 +81,8 @@ public class Survivor {
     private Optional<Item> getItemFromEquipment(Item itemToEquip) {
         return getItemList().stream().filter(item -> item == itemToEquip).findAny();
     }
+
+    public void kill() {
+        this.wounds.receive(2);
+    }
 }
