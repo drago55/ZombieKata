@@ -1,7 +1,9 @@
+import bag.EquipmentBag;
 import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import survivors.ZombieSurvivor;
+import wounds.BasicWounds;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,7 +13,7 @@ public class GameShould {
     @Test
     public void begin_with_zero_survivors() {
         //Given
-        Game game = new Game(new BasicNames());
+        Game game = new GameData(new BasicNames());
         //When
         int containsSurvivors = 0;
         //Then
@@ -21,7 +23,7 @@ public class GameShould {
     @Test
     public void add_survivors() {
         //Given
-        Game game = new Game(new BasicNames());
+        Game game = new GameData(new BasicNames());
         //When
         game.addSurvivor(new ZombieSurvivor());
         int containsSurvivors = 1;
@@ -32,7 +34,7 @@ public class GameShould {
     @Test
     public void survivors_names_are_unique() {
         //Given
-        Game game = new Game(new BasicNames());
+        Game game = new GameData(new BasicNames());
         //When
         for (int i = 0; i < 20; i++) {
             game.addSurvivor(new ZombieSurvivor());
@@ -45,11 +47,11 @@ public class GameShould {
     @Test
     public void game_ends_if_remaining_survivors_are_dead() {
         //Given
-        Game game = new Game(new BasicNames());
+        Game game = new GameData(new BasicNames());
         //When
-        game.addSurvivor(new ZombieSurvivor());
-        game.addSurvivor(new ZombieSurvivor());
-        game.addSurvivor(new ZombieSurvivor());
+        game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
+        game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
+        game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
 
         game.killAllSurvivors();
 

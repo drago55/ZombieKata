@@ -4,8 +4,10 @@ import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import wounds.BasicWounds;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
+import wounds.Wounds;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +48,7 @@ public class SurvivorShould {
     @Test
     public void have_name() {
         //Given
-        Game game = new Game(new BasicNames());
+        Game game = new GameData(new BasicNames());
         bob = new ZombieSurvivor();
 
         game.addSurvivor(bob);
@@ -60,6 +62,8 @@ public class SurvivorShould {
     public void have_zero_wounds() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        bob.receiveWound(new BasicWounds(0));
         //When
         int wounds = 0;
         //Then
@@ -72,7 +76,7 @@ public class SurvivorShould {
         bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
         //When
-        bob.receiveWound(3);
+        bob.receiveWound(new BasicWounds(3));
         //Then
         Assertions.assertTrue(bob.isDead());
     }
@@ -82,12 +86,15 @@ public class SurvivorShould {
         //Given
         bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
+        Wounds wound = new BasicWounds(2);
+
         //When
-        bob.receiveWound(2);
-        bob.receiveWound(1);
-        int wound = 2;
+        bob.receiveWound(wound);
+        wound.setWound(1);
+        bob.receiveWound(wound);
+        int expectedWound = 2;
         //Then
-        Assertions.assertEquals(wound, bob.getWounds());
+        Assertions.assertEquals(expectedWound, bob.getWounds());
     }
 
     @Test
@@ -197,7 +204,7 @@ public class SurvivorShould {
         Survivor bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
         //When
-        bob.receiveWound(1);
+        bob.receiveWound(new BasicWounds(1));
         int remainingCapacity = 4;
         //Then
         Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
@@ -212,7 +219,7 @@ public class SurvivorShould {
         expectedItems.add(pan);
         expectedItems.add(pistol);
 
-        bob.receiveWound(1);
+        bob.receiveWound(new BasicWounds(1));
 
         //Then
         Assertions.assertEquals(expectedItems, bob.getEquipmentList());

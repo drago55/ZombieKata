@@ -1,6 +1,7 @@
 package survivors;
 
 import bag.Bag;
+import wounds.Wounds;
 import equipment.Equipment;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public interface Survivor {
 
     int getWounds();
 
-    void receiveWound(int i);
+    void setWounds(Wounds wounds);
+
+    void receiveWound(Wounds wounds);
 
     boolean isDead();
 

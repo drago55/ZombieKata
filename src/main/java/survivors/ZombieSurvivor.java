@@ -1,6 +1,7 @@
 package survivors;
 
 import bag.Bag;
+import wounds.Wounds;
 import equipment.Equipment;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class ZombieSurvivor implements Survivor {
 
 
     public ZombieSurvivor() {
-        wounds = new Wounds();
         actions = Actions.getInstance();
         inHand = new ArrayList<>();
     }
@@ -44,8 +44,13 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public void receiveWound(int i) {
-        wounds.receive(i);
+    public void setWounds(Wounds wounds) {
+        this.wounds = wounds;
+    }
+
+    @Override
+    public void receiveWound(Wounds wounds) {
+        this.wounds = wounds;
         bag.reduceCapacityAndDropItem();
     }
 
@@ -110,6 +115,6 @@ public class ZombieSurvivor implements Survivor {
 
     @Override
     public void kill() {
-        this.wounds.receive(2);
+        this.wounds.setWound(2);
     }
 }
