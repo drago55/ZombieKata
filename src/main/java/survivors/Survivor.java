@@ -12,6 +12,8 @@ public interface Survivor {
 
     String getName();
 
+    int getExperience();
+
     void setName(String name);
 
     void setBag(Bag bag);

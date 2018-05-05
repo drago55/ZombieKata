@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class ZombieSurvivor implements Survivor {
     private String name;
+    private int experience;
     private Wounds wounds;
     private static Actions actions;
     private Bag bag;
@@ -31,6 +32,11 @@ public class ZombieSurvivor implements Survivor {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int getExperience() {
+        return this.experience;
     }
 
     @Override

@@ -223,7 +223,17 @@ public class SurvivorShould {
 
         //Then
         Assertions.assertEquals(expectedItems, bob.getEquipmentList());
+    }
 
+    @Test
+    public void start_with_zero_experience() {
+        //Given
+        Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        //When
+        int expectedExperience = 0;
+        //Then
+        Assertions.assertEquals(expectedExperience, bob.getExperience());
     }
 
 }
