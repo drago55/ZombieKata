@@ -1,6 +1,6 @@
-package Items;
+package equipment;
 
-public class Pistol extends Item {
+public class Pistol extends Equipment {
     public Pistol(String name) {
         super(name);
     }

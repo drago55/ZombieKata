@@ -1,20 +1,20 @@
-package Items;
+package equipment;
 
 import java.util.Objects;
 
-public abstract class Item {
+public abstract class Equipment {
 
     private String name;
 
-    public Item(String name) {
+    public Equipment(String name) {
         this.name = name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Item)) return false;
-        Item item = (Item) o;
+        if (!(o instanceof Equipment)) return false;
+        Equipment item = (Equipment) o;
         return Objects.equals(name, item.name);
     }
 

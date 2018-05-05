@@ -1,6 +1,7 @@
 package survivors;
 
-import Items.Item;
+import bag.Bag;
+import equipment.Equipment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,19 @@ public class ZombieSurvivor implements Survivor {
     private String name;
     private Wounds wounds;
     private static Actions actions;
-    private Equipment equipment;
-    private List<Item> inHand;
-
+    private Bag bag;
+    private List<Equipment> inHand;
 
 
     public ZombieSurvivor() {
         wounds = new Wounds();
         actions = Actions.getInstance();
-        equipment = new Equipment();
         inHand = new ArrayList<>();
+    }
+
+    @Override
+    public void setBag(Bag bag) {
+        this.bag = bag;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class ZombieSurvivor implements Survivor {
     @Override
     public void receiveWound(int i) {
         wounds.receive(i);
-        equipment.reduceCapacityAndDropItem();
+        bag.reduceCapacityAndDropItem();
     }
 
     @Override
@@ -62,28 +66,28 @@ public class ZombieSurvivor implements Survivor {
 
     @Override
     public int getEquipmentRemainingCapacity() {
-        return equipment.getEquipmentFreeSlots();
+        return bag.getBagFreeSlots();
     }
 
     @Override
-    public void pickUpItem(Item item) {
-        equipment.addEquipment(item);
+    public void pickUpEquipmentItem(Equipment equipmentItem) {
+        this.bag.addEquipment(equipmentItem);
 
     }
 
     @Override
-    public Set<Item> getItemList() {
-        return equipment.getItems().collect(Collectors.toSet());
+    public Set<Equipment> getEquipmentList() {
+        return bag.getItems().collect(Collectors.toSet());
     }
 
     @Override
-    public List<Item> getEquippedItems() {
+    public List<Equipment> getEquippedItems() {
         return this.inHand;
     }
 
     @Override
-    public void equip(Item item) {
-        Optional<Item> optionalOfItem = getItemFromEquipment(item);
+    public void equip(Equipment item) {
+        Optional<Equipment> optionalOfItem = getItemFromEquipmentBag(item);
         if (optionalOfItem.isPresent()) {
             if (inHand.size() == 2) {
                 unEquipFirst();
@@ -100,8 +104,8 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public Optional<Item> getItemFromEquipment(Item itemToEquip) {
-        return getItemList().stream().filter(item -> item == itemToEquip).findAny();
+    public Optional<Equipment> getItemFromEquipmentBag(Equipment itemToEquip) {
+        return getEquipmentList().stream().filter(item -> item == itemToEquip).findAny();
     }
 
     @Override

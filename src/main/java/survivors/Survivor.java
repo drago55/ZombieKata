@@ -1,6 +1,7 @@
 package survivors;
 
-import Items.Item;
+import bag.Bag;
+import equipment.Equipment;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,8 @@ public interface Survivor {
     String getName();
 
     void setName(String name);
+
+    void setBag(Bag bag);
 
     int getWounds();
 
@@ -24,17 +27,17 @@ public interface Survivor {
 
     int getEquipmentRemainingCapacity();
 
-    void pickUpItem(Item item);
+    void pickUpEquipmentItem(Equipment equipmentItem);
 
-    Set<Item> getItemList();
+    Set<Equipment> getEquipmentList();
 
-    List<Item> getEquippedItems();
+    List<Equipment> getEquippedItems();
 
-    void equip(Item item);
+    void equip(Equipment item);
 
     void unEquipFirst();
 
-    Optional<Item> getItemFromEquipment(Item itemToEquip);
+    Optional<Equipment> getItemFromEquipmentBag(Equipment equipmentItem);
 
     void kill();
 

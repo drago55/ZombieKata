@@ -13,8 +13,6 @@ public class Game {
     private Set<Survivor> survivors = new HashSet<>();
     private Names names;
 
-    public Game() {
-    }
 
     public Game(Names names) {
         this.names = names;

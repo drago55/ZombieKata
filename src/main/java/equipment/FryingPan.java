@@ -1,6 +1,6 @@
-package Items;
+package equipment;
 
-public class FryingPan extends Item {
+public class FryingPan extends Equipment {
     public FryingPan(String name) {
         super(name);
     }

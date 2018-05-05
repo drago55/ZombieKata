@@ -1,4 +1,6 @@
-import Items.*;
+import bag.EquipmentBag;
+import equipment.*;
+import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,17 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class SurvivorShould {
 
     private Survivor bob;
-    private Item sword;
-    private Item bat;
-    private Item pan;
-    private Item pistol;
-    private Item molotov;
-    private Item water;
+    private Equipment sword;
+    private Equipment bat;
+    private Equipment pan;
+    private Equipment pistol;
+    private Equipment molotov;
+    private Equipment water;
 
     @BeforeEach
     public void init() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
         sword = new Sword("Katana");
         bat = new BaseballBat("Strong baseball Bat");
@@ -33,21 +36,24 @@ public class SurvivorShould {
         pistol = new Pistol("9mm");
         molotov = new Molotov("High explosive molotov");
         water = new BottledWater("Large water");
-        bob.pickUpItem(sword);
-        bob.pickUpItem(bat);
-        bob.pickUpItem(pan);
-        bob.pickUpItem(pistol);
-        bob.pickUpItem(molotov);
-
+        bob.pickUpEquipmentItem(sword);
+        bob.pickUpEquipmentItem(bat);
+        bob.pickUpEquipmentItem(pan);
+        bob.pickUpEquipmentItem(pistol);
+        bob.pickUpEquipmentItem(molotov);
     }
-
 
     @Test
     public void have_name() {
         //Given
+        Game game = new Game(new BasicNames());
         bob = new ZombieSurvivor();
+
+        game.addSurvivor(bob);
+
+
         //Then
-        Assertions.assertEquals("Bob", bob.getName());
+        Assertions.assertEquals(bob.getName(), bob.getName());
     }
 
     @Test
@@ -64,6 +70,7 @@ public class SurvivorShould {
     public void received_two_wounds() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
         bob.receiveWound(3);
         //Then
@@ -74,6 +81,7 @@ public class SurvivorShould {
     public void additional_wounds_are_ignored() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
         bob.receiveWound(2);
         bob.receiveWound(1);
@@ -100,6 +108,7 @@ public class SurvivorShould {
     public void carry_equipment_with_capacity_of_five() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
 
         int remainingCapacity = 5;
@@ -111,28 +120,30 @@ public class SurvivorShould {
     public void pickup_item_method_throws_exception() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
-        bob.pickUpItem(sword);
-        bob.pickUpItem(bat);
-        bob.pickUpItem(pan);
-        bob.pickUpItem(pistol);
-        bob.pickUpItem(water);
+        bob.pickUpEquipmentItem(sword);
+        bob.pickUpEquipmentItem(bat);
+        bob.pickUpEquipmentItem(pan);
+        bob.pickUpEquipmentItem(pistol);
+        bob.pickUpEquipmentItem(water);
 
         //Then
         assertThrows(IllegalStateException.class, () ->
-                bob.pickUpItem(new Molotov("High explosive molotov")), "There is no more space");
+                bob.pickUpEquipmentItem(new Molotov("High explosive molotov")), "There is no more space");
     }
 
     @Test
     public void pickup_item() {
         //Given
         bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
-        bob.pickUpItem(sword);
-        bob.pickUpItem(bat);
-        bob.pickUpItem(pan);
-        bob.pickUpItem(pistol);
-        bob.pickUpItem(water);
+        bob.pickUpEquipmentItem(sword);
+        bob.pickUpEquipmentItem(bat);
+        bob.pickUpEquipmentItem(pan);
+        bob.pickUpEquipmentItem(pistol);
+        bob.pickUpEquipmentItem(water);
 
         int remainingCapacity = 0;
 
@@ -143,13 +154,13 @@ public class SurvivorShould {
     @Test
     public void have_items_in_equipment() {
 
-        Set<Item> expected = new HashSet<>();
+        Set<Equipment> expected = new HashSet<>();
         expected.add(sword);
         expected.add(bat);
         expected.add(pan);
         expected.add(pistol);
         expected.add(molotov);
-        Assertions.assertEquals(expected, bob.getItemList());
+        Assertions.assertEquals(expected, bob.getEquipmentList());
     }
 
     @Test
@@ -157,10 +168,9 @@ public class SurvivorShould {
 
         bob.equip(sword);
         bob.equip(pistol);
-        List<Item> expectedInHand = new ArrayList<>();
+        List<Equipment> expectedInHand = new ArrayList<>();
         expectedInHand.add(sword);
         expectedInHand.add(pistol);
-
         //Then
         Assertions.assertEquals(expectedInHand, bob.getEquippedItems());
     }
@@ -174,7 +184,7 @@ public class SurvivorShould {
         bob.equip(pistol);
         bob.equip(bat);
         bob.equip(sword);
-        List<Item> expectedEquippedItem = new ArrayList<>();
+        List<Equipment> expectedEquippedItem = new ArrayList<>();
         expectedEquippedItem.add(bat);
         expectedEquippedItem.add(sword);
         Assertions.assertEquals(expectedEquippedItem, bob.getEquippedItems());
@@ -185,6 +195,7 @@ public class SurvivorShould {
     public void wound_reduce_carrying_capacity() {
         //Given
         Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
         //When
         bob.receiveWound(1);
         int remainingCapacity = 4;
@@ -195,7 +206,7 @@ public class SurvivorShould {
     @Test
     public void reduced_capacity_cause_to_drop_item() {
 
-        Set<Item> expectedItems = new HashSet<>();
+        Set<Equipment> expectedItems = new HashSet<>();
         expectedItems.add(sword);
         expectedItems.add(bat);
         expectedItems.add(pan);
@@ -204,7 +215,7 @@ public class SurvivorShould {
         bob.receiveWound(1);
 
         //Then
-        Assertions.assertEquals(expectedItems, bob.getItemList());
+        Assertions.assertEquals(expectedItems, bob.getEquipmentList());
 
     }
 
