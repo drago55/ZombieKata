@@ -1,5 +1,6 @@
 import bag.EquipmentBag;
 import equipment.*;
+import levels.Levels;
 import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,8 @@ import wounds.BasicWounds;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
 import wounds.Wounds;
+import zombies.BasicZombie;
+import zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,7 +66,7 @@ public class SurvivorShould {
         //Given
         bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
-        bob.receiveWound(new BasicWounds(0));
+        bob.receiveWound(new BasicWounds());
         //When
         int wounds = 0;
         //Then
@@ -76,8 +79,9 @@ public class SurvivorShould {
         bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
         //When
-        bob.receiveWound(new BasicWounds(3));
+        bob.receiveWound(new BasicWounds().setWounds(3));
         //Then
+        System.out.println("bob has amount of wounds " + bob.getWounds());
         Assertions.assertTrue(bob.isDead());
     }
 
@@ -86,11 +90,11 @@ public class SurvivorShould {
         //Given
         bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
-        Wounds wound = new BasicWounds(2);
-
+        Wounds wound = new BasicWounds();
+        wound.setWounds(2);
         //When
         bob.receiveWound(wound);
-        wound.setWound(1);
+        wound.setWounds(1);
         bob.receiveWound(wound);
         int expectedWound = 2;
         //Then
@@ -204,7 +208,7 @@ public class SurvivorShould {
         Survivor bob = new ZombieSurvivor();
         bob.setBag(new EquipmentBag());
         //When
-        bob.receiveWound(new BasicWounds(1));
+        bob.receiveWound(new BasicWounds().setWounds(1));
         int remainingCapacity = 4;
         //Then
         Assertions.assertEquals(remainingCapacity, bob.getEquipmentRemainingCapacity());
@@ -219,7 +223,7 @@ public class SurvivorShould {
         expectedItems.add(pan);
         expectedItems.add(pistol);
 
-        bob.receiveWound(new BasicWounds(1));
+        bob.receiveWound(new BasicWounds().setWounds(1));
 
         //Then
         Assertions.assertEquals(expectedItems, bob.getEquipmentList());
@@ -232,6 +236,44 @@ public class SurvivorShould {
         bob.setBag(new EquipmentBag());
         //When
         int expectedExperience = 0;
+        //Then
+        Assertions.assertEquals(expectedExperience, bob.getExperience());
+    }
+
+    @Test
+    public void have_current_level() {
+        //Given
+        Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        //When
+        for (int i = 0; i < 43; i++) {
+            bob.attack(new BasicZombie());
+        }
+        //Then
+        Assertions.assertEquals(Levels.RED, bob.getCurrentLevel());
+
+    }
+
+    @Test
+    public void starts_with_level_blue() {
+        //Given
+        Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        //When
+
+        //Then
+        Assertions.assertEquals(Levels.BLUE, bob.getCurrentLevel());
+    }
+
+    @Test
+    public void gain_one_experience_on_killed_zombie() {
+        //Given
+        Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        Zombie zombie = new BasicZombie();
+        //When
+        bob.attack(zombie);
+        int expectedExperience = 1;
         //Then
         Assertions.assertEquals(expectedExperience, bob.getExperience());
     }

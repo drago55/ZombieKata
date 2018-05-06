@@ -1,8 +1,13 @@
 package survivors;
 
 import bag.Bag;
+import levels.Level;
+import levels.LevelSystem;
+import levels.Levels;
+import wounds.BasicWounds;
 import wounds.Wounds;
 import equipment.Equipment;
+import zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +16,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ZombieSurvivor implements Survivor {
+
     private String name;
-    private int experience;
+    private int experience = 0;
+    private int baseDamage = 2;
     private Wounds wounds;
     private static Actions actions;
     private Bag bag;
     private List<Equipment> inHand;
-
+    private Level level;
 
     public ZombieSurvivor() {
+        level = new LevelSystem();
         actions = Actions.getInstance();
         inHand = new ArrayList<>();
     }
@@ -121,6 +129,20 @@ public class ZombieSurvivor implements Survivor {
 
     @Override
     public void kill() {
-        this.wounds.setWound(2);
+        this.wounds.setWounds(2);
+    }
+
+    @Override
+    public void attack(Zombie zombie) {
+
+        zombie.receiveDamage(new BasicWounds().setWounds(baseDamage));
+        if (zombie.isDead()) {
+            this.experience++;
+        }
+    }
+
+    @Override
+    public Levels getCurrentLevel() {
+        return level.getCurrentLevel(experience);
     }
 }

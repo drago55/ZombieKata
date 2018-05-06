@@ -1,8 +1,10 @@
 package survivors;
 
 import bag.Bag;
+import levels.Levels;
 import wounds.Wounds;
 import equipment.Equipment;
+import zombies.Zombie;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,4 +48,7 @@ public interface Survivor {
 
     void kill();
 
+    void attack(Zombie zombie);
+
+    Levels getCurrentLevel();
 }

@@ -8,14 +8,12 @@ public class BasicWounds implements Wounds {
         return wounds;
     }
 
-    public BasicWounds(int damage) {
-        setWound(damage);
-    }
 
     public BasicWounds() {
     }
 
-    public void setWound(int damage) {
-        wounds = wounds + damage >= 2 ? 2 : wounds + damage;
+    public Wounds setWounds(int wounds) {
+        this.wounds = this.wounds + wounds >= 2 ? 2 : this.wounds + wounds;
+        return this;
     }
 }

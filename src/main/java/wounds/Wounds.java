@@ -4,5 +4,5 @@ public interface Wounds {
 
     int getWounds();
 
-    void setWound(int damage);
+    Wounds setWounds(int wounds);
 }
