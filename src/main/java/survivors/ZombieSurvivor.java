@@ -128,7 +128,7 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public void kill() {
+    public void killSurvivor() {
         this.wounds.setWounds(2);
     }
 

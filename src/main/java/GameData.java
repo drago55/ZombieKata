@@ -1,4 +1,7 @@
 import bag.Bag;
+import levels.Level;
+import levels.LevelSystem;
+import levels.Levels;
 import names.Names;
 import survivors.Survivor;
 import wounds.Wounds;
@@ -14,9 +17,11 @@ public class GameData implements Game {
     private Survivor zombieSurvivor;
     private Set<Survivor> survivors = new HashSet<>();
     private Names names;
-
+    private Level level;
+    private static final int NO_EXPERIENCE = 0;
 
     public GameData(Names names) {
+        level = new LevelSystem();
         this.names = names;
     }
 
@@ -55,12 +60,26 @@ public class GameData implements Game {
 
     @Override
     public void killAllSurvivors() {
-        survivors.stream().forEach(survivor -> survivor.kill());
+        survivors.stream().forEach(survivor -> survivor.killSurvivor());
         gameEnded = true;
     }
 
     @Override
     public boolean isEnded() {
         return gameEnded;
+    }
+
+    @Override
+    public Levels getCurrentLevel() {
+        int experience = getHighestExperiencedSurvivor();
+        return level.getCurrentLevel(experience);
+    }
+
+    private int getHighestExperiencedSurvivor() {
+        return survivors.stream()
+                .filter((survivor -> !survivor.isDead()))
+                .mapToInt((survivor) -> survivor.getExperience())
+                .max()
+                .orElse(NO_EXPERIENCE);
     }
 }

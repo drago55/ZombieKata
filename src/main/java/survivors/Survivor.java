@@ -46,7 +46,7 @@ public interface Survivor {
 
     Optional<Equipment> getItemFromEquipmentBag(Equipment equipmentItem);
 
-    void kill();
+    void killSurvivor();
 
     void attack(Zombie zombie);
 

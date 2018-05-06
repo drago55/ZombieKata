@@ -1,4 +1,5 @@
 import bag.Bag;
+import levels.Levels;
 import survivors.Survivor;
 import wounds.Wounds;
 
@@ -20,4 +21,6 @@ public interface Game {
     void killAllSurvivors();
 
     boolean isEnded();
+
+    Levels getCurrentLevel();
 }

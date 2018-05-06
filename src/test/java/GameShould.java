@@ -1,9 +1,12 @@
 import bag.EquipmentBag;
+import levels.Levels;
 import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import survivors.Survivor;
 import survivors.ZombieSurvivor;
 import wounds.BasicWounds;
+import zombies.BasicZombie;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,6 +60,32 @@ public class GameShould {
 
         //Then
         Assertions.assertTrue(game.isEnded());
+    }
+
+    @Test
+    public void begin_with_level_blue() {
+        //Given
+        Game game = new GameData(new BasicNames());
+        //Then
+        Assertions.assertEquals(Levels.BLUE, game.getCurrentLevel());
+    }
+
+    @Test
+    public void have_level_of_highest_living_survivor() {
+        //Given
+        Game game = new GameData(new BasicNames());
+        //When
+        Survivor bob = new ZombieSurvivor();
+        bob.setBag(new EquipmentBag());
+        bob.setWounds(new BasicWounds());
+        game.addSurvivor(bob);
+        game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
+        for (int i = 0; i < 19; i++) {
+            bob.attack(new BasicZombie());
+        }
+        //Then
+        Assertions.assertEquals(Levels.ORANGE, game.getCurrentLevel());
 
     }
+
 }
