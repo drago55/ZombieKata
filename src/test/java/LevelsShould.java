@@ -12,9 +12,9 @@ public class LevelsShould {
         Level level = new LevelSystem();
 
         //Then
-        Assertions.assertEquals(Levels.BLUE, level.getCurrentLevel(6));
-        Assertions.assertEquals(Levels.BLUE, level.getCurrentLevel(0));
-        Assertions.assertNotEquals(Levels.BLUE, level.getCurrentLevel(7));
+        Assertions.assertEquals(Levels.BLUE, level.getLevel(6));
+        Assertions.assertEquals(Levels.BLUE, level.getLevel(0));
+        Assertions.assertNotEquals(Levels.BLUE, level.getLevel(7));
 
     }
 
@@ -24,10 +24,10 @@ public class LevelsShould {
         Level level = new LevelSystem();
 
         //Then
-        Assertions.assertEquals(Levels.YELLOW, level.getCurrentLevel(7));
-        Assertions.assertEquals(Levels.YELLOW, level.getCurrentLevel(18));
-        Assertions.assertEquals(Levels.YELLOW, level.getCurrentLevel(12));
-        Assertions.assertNotEquals(Levels.YELLOW, level.getCurrentLevel(19));
+        Assertions.assertEquals(Levels.YELLOW, level.getLevel(7));
+        Assertions.assertEquals(Levels.YELLOW, level.getLevel(18));
+        Assertions.assertEquals(Levels.YELLOW, level.getLevel(12));
+        Assertions.assertNotEquals(Levels.YELLOW, level.getLevel(19));
 
     }
 
@@ -37,11 +37,11 @@ public class LevelsShould {
         Level level = new LevelSystem();
 
         //Then
-        Assertions.assertEquals(Levels.ORANGE, level.getCurrentLevel(19));
-        Assertions.assertEquals(Levels.ORANGE, level.getCurrentLevel(33));
-        Assertions.assertEquals(Levels.ORANGE, level.getCurrentLevel(42));
-        Assertions.assertNotEquals(Levels.ORANGE, level.getCurrentLevel(18));
-        Assertions.assertNotEquals(Levels.ORANGE, level.getCurrentLevel(43));
+        Assertions.assertEquals(Levels.ORANGE, level.getLevel(19));
+        Assertions.assertEquals(Levels.ORANGE, level.getLevel(33));
+        Assertions.assertEquals(Levels.ORANGE, level.getLevel(42));
+        Assertions.assertNotEquals(Levels.ORANGE, level.getLevel(18));
+        Assertions.assertNotEquals(Levels.ORANGE, level.getLevel(43));
 
     }
 
@@ -51,9 +51,9 @@ public class LevelsShould {
         Level level = new LevelSystem();
 
         //Then
-        Assertions.assertEquals(Levels.RED, level.getCurrentLevel(43));
-        Assertions.assertNotEquals(Levels.RED, level.getCurrentLevel(42));
-        Assertions.assertNotEquals(Levels.RED, level.getCurrentLevel(33));
+        Assertions.assertEquals(Levels.RED, level.getLevel(43));
+        Assertions.assertNotEquals(Levels.RED, level.getLevel(42));
+        Assertions.assertNotEquals(Levels.RED, level.getLevel(33));
 
     }
 

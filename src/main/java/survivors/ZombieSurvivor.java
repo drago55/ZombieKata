@@ -1,12 +1,13 @@
 package survivors;
 
 import bag.Bag;
+import equipment.Equipment;
+import game.Game;
 import levels.Level;
 import levels.LevelSystem;
 import levels.Levels;
 import wounds.BasicWounds;
 import wounds.Wounds;
-import equipment.Equipment;
 import zombies.Zombie;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static names.StringConstants.*;
 
 public class ZombieSurvivor implements Survivor {
 
@@ -24,10 +27,13 @@ public class ZombieSurvivor implements Survivor {
     private static Actions actions;
     private Bag bag;
     private List<Equipment> inHand;
-    private Level level;
+    private Level levelSystem;
+    private Levels currentLevel;
+    private Game game;
 
     public ZombieSurvivor() {
-        level = new LevelSystem();
+        levelSystem = new LevelSystem(this);
+        currentLevel = Levels.BLUE;
         actions = Actions.getInstance();
         inHand = new ArrayList<>();
     }
@@ -66,6 +72,19 @@ public class ZombieSurvivor implements Survivor {
     public void receiveWound(Wounds wounds) {
         this.wounds = wounds;
         bag.reduceCapacityAndDropItem();
+        notifyWoundReceived(wounds);
+        notifyIfDead();
+    }
+
+    private void notifyWoundReceived(Wounds wounds) {
+        this.game.notify(SURVIVOR + this.getName() + RECEIVED_WOUND + wounds.getWounds());
+    }
+
+    private void notifyIfDead() {
+        if (this.isDead()) {
+            this.game.notify(SURVIVOR + this.getName() + IS_DEAD);
+            this.game.onKilledSurvivor();
+        }
     }
 
     @Override
@@ -91,7 +110,7 @@ public class ZombieSurvivor implements Survivor {
     @Override
     public void pickUpEquipmentItem(Equipment equipmentItem) {
         this.bag.addEquipment(equipmentItem);
-
+        game.notify(SURVIVOR + this.getName() + ITEM_PICK_UP + equipmentItem.getName());
     }
 
     @Override
@@ -134,15 +153,30 @@ public class ZombieSurvivor implements Survivor {
 
     @Override
     public void attack(Zombie zombie) {
-
         zombie.receiveDamage(new BasicWounds().setWounds(baseDamage));
         if (zombie.isDead()) {
             this.experience++;
+            if (levelSystem.isLevelUp(experience)) {
+                this.onLevelUp();
+            }
         }
     }
 
     @Override
     public Levels getCurrentLevel() {
-        return level.getCurrentLevel(experience);
+        return currentLevel;
+    }
+
+    @Override
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+
+    @Override
+    public void onLevelUp() {
+        currentLevel = levelSystem.getLevel(experience);
+        this.game.notify(LEVEL_UP + SURVIVOR + this.getName() + IS_LEVEL + currentLevel);
+        this.game.onLevelUp();
     }
 }

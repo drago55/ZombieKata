@@ -1,3 +1,5 @@
+package game;
+
 import bag.Bag;
 import levels.Levels;
 import survivors.Survivor;
@@ -5,8 +7,7 @@ import wounds.Wounds;
 
 import java.util.Set;
 
-public interface Game {
-
+public interface Game extends GameNotification {
 
     int getSurvivorsCount();
 
@@ -23,4 +24,6 @@ public interface Game {
     boolean isEnded();
 
     Levels getCurrentLevel();
+
+
 }

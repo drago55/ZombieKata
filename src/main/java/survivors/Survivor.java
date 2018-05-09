@@ -1,16 +1,18 @@
 package survivors;
 
 import bag.Bag;
+import equipment.Equipment;
+import game.Game;
+import levels.LevelUp;
 import levels.Levels;
 import wounds.Wounds;
-import equipment.Equipment;
 import zombies.Zombie;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Survivor {
+public interface Survivor extends LevelUp {
 
     String getName();
 
@@ -51,4 +53,6 @@ public interface Survivor {
     void attack(Zombie zombie);
 
     Levels getCurrentLevel();
+
+    void setGame(Game game);
 }

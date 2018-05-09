@@ -1,4 +1,6 @@
 import bag.EquipmentBag;
+import game.Game;
+import game.GameData;
 import levels.Levels;
 import names.BasicNames;
 import org.junit.jupiter.api.Assertions;
@@ -75,13 +77,13 @@ public class GameShould {
         //Given
         Game game = new GameData(new BasicNames());
         //When
-        Survivor bob = new ZombieSurvivor();
-        bob.setBag(new EquipmentBag());
-        bob.setWounds(new BasicWounds());
-        game.addSurvivor(bob);
+        Survivor survivor = new ZombieSurvivor();
+        survivor.setBag(new EquipmentBag());
+        survivor.setWounds(new BasicWounds());
+        game.addSurvivor(survivor);
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         for (int i = 0; i < 19; i++) {
-            bob.attack(new BasicZombie());
+            survivor.attack(new BasicZombie());
         }
         //Then
         Assertions.assertEquals(Levels.ORANGE, game.getCurrentLevel());
