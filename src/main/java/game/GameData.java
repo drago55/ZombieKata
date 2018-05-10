@@ -21,7 +21,6 @@ import static names.StringConstants.*;
 
 public class GameData implements Game {
 
-
     private boolean gameEnded = false;
     private Survivor zombieSurvivor;
     private Set<Survivor> survivors = new HashSet<>();
@@ -98,7 +97,6 @@ public class GameData implements Game {
                 .max()
                 .orElse(maxSurvivorExperience);
     }
-
 
     @Override
     public void notify(Object o) {

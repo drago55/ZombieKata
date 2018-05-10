@@ -8,8 +8,8 @@ public class BasicNames implements Names {
 
     private static List<String> listOfAvailableNames;
 
-    public BasicNames() {
-        this.listOfAvailableNames = NameConstants.initListOfAvailableNames();
+    public BasicNames(NameConstants names) {
+        this.listOfAvailableNames = names.initListOfAvailableNames();
     }
 
     @Override

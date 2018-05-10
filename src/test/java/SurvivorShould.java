@@ -2,11 +2,12 @@ import bag.EquipmentBag;
 import equipment.*;
 import game.Game;
 import game.GameData;
+import history.History;
 import levels.Levels;
 import names.BasicNames;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import names.Names;
+import names.SurvivorNames;
+import org.junit.jupiter.api.*;
 import wounds.BasicWounds;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
@@ -35,8 +36,13 @@ public class SurvivorShould {
     @BeforeEach
     public void init() {
         //Given
-        setSurvivor();
-        setGame();
+        Names names = new BasicNames(new SurvivorNames());
+        game = new GameData(names);
+        survivor = new ZombieSurvivor();
+        survivor.setBag(new EquipmentBag());
+        survivor.setWounds(new BasicWounds());
+        survivor.setGame(game);
+        game.addSurvivor(survivor);
 
         //When
         sword = new Sword("Katana");
@@ -45,27 +51,17 @@ public class SurvivorShould {
         pistol = new Pistol("9mm");
         molotov = new Molotov("High explosive molotov");
         water = new BottledWater("Large water");
-        survivor.pickUpEquipmentItem(sword);
-        survivor.pickUpEquipmentItem(bat);
-        survivor.pickUpEquipmentItem(pan);
-        survivor.pickUpEquipmentItem(pistol);
-        survivor.pickUpEquipmentItem(molotov);
+
     }
 
-    private void setGame() {
-        game = new GameData(new BasicNames());
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
+    @AfterEach
+    public void cleanUp() {
+        History history = game.getGameHistory();
+        history.clearLog();
     }
 
     @Test
     public void have_name() {
-        //Given
-        Game game = new GameData(new BasicNames());
-        survivor = new ZombieSurvivor();
-
-        game.addSurvivor(survivor);
-
 
         //Then
         Assertions.assertEquals(survivor.getName(), survivor.getName());
@@ -74,9 +70,7 @@ public class SurvivorShould {
     @Test
     public void have_zero_wounds() {
         //Given
-        setSurvivor();
-        survivor.setGame(game);
-        survivor.receiveWound(new BasicWounds());
+
         //When
         int wounds = 0;
         //Then
@@ -86,9 +80,7 @@ public class SurvivorShould {
     @Test
     public void received_two_wounds() {
         //Given
-        setSurvivor();
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
+
         //When
         survivor.receiveWound(new BasicWounds().setWounds(3));
         //Then
@@ -114,9 +106,9 @@ public class SurvivorShould {
     public void perform_three_action_per_turn() {
         //Given
 
-        survivor.performAction();
-        survivor.performAction();
-        survivor.performAction();
+        survivor.doAction();
+        survivor.doAction();
+        survivor.doAction();
 
         int remainingActions = 0;
         //Then
@@ -125,10 +117,7 @@ public class SurvivorShould {
 
     @Test
     public void carry_equipment_with_capacity_of_five() {
-        //Given
-        setSurvivor();
-        //When
-
+         //When
         int remainingCapacity = 5;
         //Then
         Assertions.assertEquals(remainingCapacity, survivor.getEquipmentRemainingCapacity());
@@ -136,9 +125,7 @@ public class SurvivorShould {
 
     @Test
     public void pickup_item_method_throws_exception() {
-        //Given
-        setSurvivor();
-        game.addSurvivor(survivor);
+
         //When
         survivor.pickUpEquipmentItem(sword);
         survivor.pickUpEquipmentItem(bat);
@@ -153,9 +140,7 @@ public class SurvivorShould {
 
     @Test
     public void pickup_item() {
-        //Given
-        setSurvivor();
-        setGame();
+
         //When
         survivor.pickUpEquipmentItem(sword);
         survivor.pickUpEquipmentItem(bat);
@@ -171,19 +156,29 @@ public class SurvivorShould {
 
     @Test
     public void have_items_in_equipment() {
-
+        //When
+        survivor.pickUpEquipmentItem(sword);
+        survivor.pickUpEquipmentItem(bat);
+        survivor.pickUpEquipmentItem(pan);
+        survivor.pickUpEquipmentItem(pistol);
+        survivor.pickUpEquipmentItem(water);
         Set<Equipment> expected = new HashSet<>();
         expected.add(sword);
         expected.add(bat);
         expected.add(pan);
         expected.add(pistol);
-        expected.add(molotov);
+        expected.add(water);
         Assertions.assertEquals(expected, survivor.getEquipmentList());
     }
 
     @Test
     public void equip_in_hand_available_item() {
-
+        //When
+        survivor.pickUpEquipmentItem(sword);
+        survivor.pickUpEquipmentItem(bat);
+        survivor.pickUpEquipmentItem(pan);
+        survivor.pickUpEquipmentItem(pistol);
+        survivor.pickUpEquipmentItem(water);
         survivor.equip(sword);
         survivor.equip(pistol);
         List<Equipment> expectedInHand = new ArrayList<>();
@@ -195,7 +190,12 @@ public class SurvivorShould {
 
     @Test
     public void equip_only_two_items() {
-
+        //When
+        survivor.pickUpEquipmentItem(sword);
+        survivor.pickUpEquipmentItem(bat);
+        survivor.pickUpEquipmentItem(pan);
+        survivor.pickUpEquipmentItem(pistol);
+        survivor.pickUpEquipmentItem(water);
         survivor.equip(pistol);
         survivor.equip(molotov);
         survivor.equip(molotov);
@@ -211,10 +211,7 @@ public class SurvivorShould {
 
     @Test
     public void wound_reduce_carrying_capacity() {
-        //Given
-        setSurvivor();
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
+
         //When
         survivor.receiveWound(new BasicWounds().setWounds(1));
         int remainingCapacity = 4;
@@ -224,24 +221,25 @@ public class SurvivorShould {
 
     @Test
     public void reduced_capacity_cause_to_drop_item() {
-
+        //When
+        survivor.pickUpEquipmentItem(sword);
+        survivor.pickUpEquipmentItem(bat);
+        survivor.pickUpEquipmentItem(pan);
+        survivor.pickUpEquipmentItem(pistol);
+        survivor.pickUpEquipmentItem(water);
         Set<Equipment> expectedItems = new HashSet<>();
         expectedItems.add(sword);
         expectedItems.add(bat);
         expectedItems.add(pan);
         expectedItems.add(pistol);
-
         survivor.receiveWound(new BasicWounds().setWounds(1));
-
         //Then
         Assertions.assertEquals(expectedItems, survivor.getEquipmentList());
     }
 
     @Test
     public void start_with_zero_experience() {
-        //Given
-        setSurvivor();
-        //When
+         //When
         int expectedExperience = 0;
         //Then
         Assertions.assertEquals(expectedExperience, survivor.getExperience());
@@ -249,12 +247,6 @@ public class SurvivorShould {
 
     @Test
     public void have_current_level() {
-        //Given
-        Wounds wound = new BasicWounds();
-
-        setSurvivor();
-        setGame();
-        survivor.setWounds(wound);
         //When
         for (int i = 0; i < 43; i++) {
             survivor.attack(new BasicZombie());
@@ -266,31 +258,18 @@ public class SurvivorShould {
 
     @Test
     public void starts_with_level_blue() {
-        //Given
-        setSurvivor();
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
-        //When
-
         //Then
         Assertions.assertEquals(Levels.BLUE, survivor.getCurrentLevel());
     }
 
     @Test
     public void gain_one_experience_on_killed_zombie() {
-        //Given
-        setSurvivor();
         Zombie zombie = new BasicZombie();
         //When
         survivor.attack(zombie);
         int expectedExperience = 1;
         //Then
         Assertions.assertEquals(expectedExperience, survivor.getExperience());
-    }
-
-    private void setSurvivor() {
-        survivor = new ZombieSurvivor();
-        survivor.setBag(new EquipmentBag());
     }
 
 }

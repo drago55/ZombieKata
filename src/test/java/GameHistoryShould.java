@@ -4,6 +4,8 @@ import game.Game;
 import game.GameData;
 import history.History;
 import names.BasicNames;
+import names.Names;
+import names.SurvivorNames;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +29,8 @@ public class GameHistoryShould {
 
     @BeforeEach
     public void init() {
-        game = new GameData(new BasicNames());
+        Names names = new BasicNames(new SurvivorNames());
+        game = new GameData(names);
         history = game.getGameHistory();
         survivor = new ZombieSurvivor();
         game.addSurvivor(survivor);
@@ -38,7 +41,7 @@ public class GameHistoryShould {
 
     @AfterEach
     public void close() {
-          history.clearLog();
+        history.clearLog();
     }
 
     @Test
@@ -72,7 +75,7 @@ public class GameHistoryShould {
         survivor.receiveWound(new BasicWounds().setWounds(2));
         String expected = SURVIVOR + survivor.getName() + IS_DEAD;
         Assert.assertEquals(expected, history.getLogLine(IS_DEAD));
-     }
+    }
 
     @Test
     public void note_survivor_levels_up() throws IOException {

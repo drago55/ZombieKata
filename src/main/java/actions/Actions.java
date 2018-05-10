@@ -1,6 +1,6 @@
-package survivors;
+package actions;
 
-public class Actions {
+public class Actions implements Action {
 
     private int remaining = 3;
     private static Actions action = null;
@@ -17,10 +17,13 @@ public class Actions {
         return action;
     }
 
-    public int getRemaining() {
-        return remaining;
+    private void reduceActions() {
+        if (remaining != 0) {
+            remaining -= 1;
+        }
     }
 
+    @Override
     public void doAction() {
         if (remaining == 0) {
             throw new IllegalStateException("Can't do more than tree actions");
@@ -28,9 +31,8 @@ public class Actions {
         reduceActions();
     }
 
-    private void reduceActions() {
-        if (remaining != 0) {
-            remaining -= 1;
-        }
+    @Override
+    public int getRemainingActions() {
+        return remaining;
     }
 }

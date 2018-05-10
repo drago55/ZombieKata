@@ -1,5 +1,6 @@
 package survivors;
 
+import actions.Actions;
 import bag.Bag;
 import equipment.Equipment;
 import game.Game;
@@ -93,13 +94,13 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public void performAction() {
+    public void doAction() {
         this.actions.doAction();
     }
 
     @Override
     public int getRemainingActions() {
-        return actions.getRemaining();
+        return actions.getRemainingActions();
     }
 
     @Override

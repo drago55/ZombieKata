@@ -1,5 +1,6 @@
 package survivors;
 
+import actions.Action;
 import bag.Bag;
 import equipment.Equipment;
 import game.Game;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Survivor extends LevelUp {
+public interface Survivor extends LevelUp, Action {
 
     String getName();
 
@@ -29,10 +30,6 @@ public interface Survivor extends LevelUp {
     void receiveWound(Wounds wounds);
 
     boolean isDead();
-
-    void performAction();
-
-    int getRemainingActions();
 
     int getEquipmentRemainingCapacity();
 
