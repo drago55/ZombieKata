@@ -1,11 +1,14 @@
 import bag.EquipmentBag;
 import game.Game;
 import game.GameData;
+import history.History;
 import levels.Levels;
 import names.BasicNames;
 import names.Names;
 import names.SurvivorNames;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
@@ -17,11 +20,25 @@ import java.util.stream.Collectors;
 
 public class GameShould {
 
+    private History history;
+    private Game game;
+    private Names names;
+
+    @BeforeEach
+    public void setUp(){
+        //Given
+         names = new BasicNames(new SurvivorNames());
+         game = new GameData(names);
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        history = game.getGameHistory();
+        history.clearLog();
+    }
     @Test
     public void begin_with_zero_survivors() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
+
         //When
         int containsSurvivors = 0;
         //Then
@@ -30,9 +47,6 @@ public class GameShould {
 
     @Test
     public void add_survivors() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
         //When
         game.addSurvivor(new ZombieSurvivor());
         int containsSurvivors = 1;
@@ -42,10 +56,7 @@ public class GameShould {
 
     @Test
     public void survivors_names_are_unique() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
-        //When
+         //When
         for (int i = 0; i < 20; i++) {
             game.addSurvivor(new ZombieSurvivor());
         }
@@ -56,10 +67,7 @@ public class GameShould {
 
     @Test
     public void game_ends_if_remaining_survivors_are_dead() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
-        //When
+         //When
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
@@ -72,18 +80,12 @@ public class GameShould {
 
     @Test
     public void begin_with_level_blue() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
-        //Then
-        Assertions.assertEquals(Levels.BLUE, game.getCurrentLevel());
+          //Then
+        Assertions.assertEquals(Levels.BLUE, game.getCurrentGameLevel());
     }
 
     @Test
     public void have_level_of_highest_living_survivor() {
-        //Given
-        Names names = new BasicNames(new SurvivorNames());
-        Game game = new GameData(names);
         //When
         Survivor survivor = new ZombieSurvivor();
         survivor.setBag(new EquipmentBag());
@@ -94,7 +96,7 @@ public class GameShould {
             survivor.attack(new BasicZombie());
         }
         //Then
-        Assertions.assertEquals(Levels.ORANGE, game.getCurrentLevel());
+        Assertions.assertEquals(Levels.ORANGE, game.getCurrentGameLevel());
 
     }
 

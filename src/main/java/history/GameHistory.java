@@ -23,9 +23,13 @@ public class GameHistory implements History {
             writer.append("-----------------------------------------------------------" + "\n");
             writer.flush();
             writer.close();
-            System.out.println("------------------------------------------------------");
-            System.out.println(o.toString());
+            logToConsole(o);
         }
+    }
+
+    private void logToConsole(Object o) {
+        System.out.println("------------------------------------------------------");
+        System.out.println(o.toString());
     }
 
     @Override

@@ -117,7 +117,7 @@ public class SurvivorShould {
 
     @Test
     public void carry_equipment_with_capacity_of_five() {
-         //When
+        //When
         int remainingCapacity = 5;
         //Then
         Assertions.assertEquals(remainingCapacity, survivor.getEquipmentRemainingCapacity());
@@ -239,7 +239,7 @@ public class SurvivorShould {
 
     @Test
     public void start_with_zero_experience() {
-         //When
+        //When
         int expectedExperience = 0;
         //Then
         Assertions.assertEquals(expectedExperience, survivor.getExperience());
@@ -272,4 +272,43 @@ public class SurvivorShould {
         Assertions.assertEquals(expectedExperience, survivor.getExperience());
     }
 
+    @Test
+    public void unlock_skill_action() {
+        //+1 Action" should have one additional Action (a total of 4).
+    }
+
+    @Test
+    public void unlock_skill_hoard() {
+        //skill can carry one additional piece of Equipment
+    }
+
+    @Test
+    public void survivor_remains_level_red_beyond_43_experience() {
+    }
+
+    @Test
+    public void survivor_restarts_skill_tree() {
+        //beyond 43 experience skill tree starts from beginning but remain current unlocked skills
+    }
+
+    @Test
+    public void survivor_skill_tree_reaching_yellow_again() {
+        //43+7=50 experience no more potential skills at second yellow
+    }
+
+    @Test
+    public void survivor_skill_tree_unlocked_orange_again() {
+        //43+18=61 experience second orange skill is unlocked
+    }
+
+    @Test
+    public void survivor_skill_tree_unlocked_red_again() {
+        //43 + 43 = 86 total
+
+    }
+
+    @Test
+    public void survivor_skill_tree_unlocked_last_red() {
+        //43 + 43 + 43 = 129 total
+    }
 }

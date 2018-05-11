@@ -33,7 +33,7 @@ public class GameData implements Game {
     public GameData(Names names) {
         this.currentLevel = Levels.BLUE;
         this.history = new GameHistory("Game " + this.hashCode());
-        this.levelSystem = new LevelSystem(this);
+        this.levelSystem = new LevelSystem();
         this.names = names;
         this.notify(GAME_STARTED + LocalTime.now().withNano(0));
     }
@@ -86,7 +86,7 @@ public class GameData implements Game {
     }
 
     @Override
-    public Levels getCurrentLevel() {
+    public Levels getCurrentGameLevel() {
         return currentLevel;
     }
 

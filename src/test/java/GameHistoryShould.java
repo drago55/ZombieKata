@@ -92,8 +92,8 @@ public class GameHistoryShould {
         for (int i = 0; i < 19; i++) {
             survivor.attack(new BasicZombie());
         }
-        String expected = GAME_INCREASED_DIFFICULTY + game.getCurrentLevel();
-        Assert.assertEquals(expected, history.getLogLine(GAME_INCREASED_DIFFICULTY + game.getCurrentLevel()));
+        String expected = GAME_INCREASED_DIFFICULTY + game.getCurrentGameLevel();
+        Assert.assertEquals(expected, history.getLogLine(GAME_INCREASED_DIFFICULTY + game.getCurrentGameLevel()));
     }
 
     @Test
@@ -101,5 +101,14 @@ public class GameHistoryShould {
         game.killAllSurvivors();
         String expected = GAME_OVER;
         Assert.assertEquals(expected, history.getLogLine(GAME_OVER));
+    }
+
+    @Test
+    public void note_survivor_has_acquired_new_skill() throws IOException {
+        for (int i = 0; i < 19; i++) {
+            survivor.attack(new BasicZombie());
+        }
+        String expected = NEW_SKILL + survivor.getName();
+        Assert.assertEquals(expected, history.getLogLine(NEW_SKILL + survivor.getName()));
     }
 }

@@ -23,7 +23,7 @@ public interface Game extends GameNotification {
 
     boolean isEnded();
 
-    Levels getCurrentLevel();
+    Levels getCurrentGameLevel();
 
 
 }

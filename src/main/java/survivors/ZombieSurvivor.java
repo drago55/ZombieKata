@@ -33,7 +33,7 @@ public class ZombieSurvivor implements Survivor {
     private Game game;
 
     public ZombieSurvivor() {
-        levelSystem = new LevelSystem(this);
+        levelSystem = new LevelSystem();
         currentLevel = Levels.BLUE;
         actions = Actions.getInstance();
         inHand = new ArrayList<>();
