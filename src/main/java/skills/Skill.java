@@ -1,11 +1,22 @@
 package skills;
 
+import levels.Levels;
+
+import java.util.Set;
+
 public interface Skill {
-    short getPotentialSkills();
 
-    Skills getUnlockedSkills();
+    Set<SkillAttributes> getListOfSkills();
 
-    void updateSkillTree(int experience);
+    void updateSkillTree();
 
-    Skills[] getSkillTree();
+    SkillAttributes getLastSkill();
+
+    Set<SkillAttributes> getUnlockedSkills();
+
+    void onSkillUpdate();
+
+    void onSkillTreeRestart();
+
+    Levels getCurrentLevel();
 }

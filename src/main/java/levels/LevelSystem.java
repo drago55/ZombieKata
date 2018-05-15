@@ -11,7 +11,6 @@ public class LevelSystem implements Level {
         } else if (experience > 42) {
             return Levels.RED;
         }
-
         return Levels.BLUE;
     }
 

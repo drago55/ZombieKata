@@ -51,4 +51,11 @@ public class EquipmentBag implements Bag {
         dropOne.toArray(equipments);
     }
 
+    @Override
+    public void addExtraSlot() {
+        Set<Equipment> addExtraSlot = getItems().collect(Collectors.toSet());
+        this.equipments = new Equipment[capacity += 1];
+        addExtraSlot.toArray(equipments);
+    }
+
 }

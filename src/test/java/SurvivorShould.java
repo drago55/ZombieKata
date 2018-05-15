@@ -7,7 +7,9 @@ import levels.Levels;
 import names.BasicNames;
 import names.Names;
 import names.SurvivorNames;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
+import skills.SkillTree;
 import wounds.BasicWounds;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
@@ -43,6 +45,7 @@ public class SurvivorShould {
         survivor.setWounds(new BasicWounds());
         survivor.setGame(game);
         game.addSurvivor(survivor);
+        survivor.setSkillTree(new SkillTree(survivor, game));
 
         //When
         sword = new Sword("Katana");
@@ -112,7 +115,7 @@ public class SurvivorShould {
 
         int remainingActions = 0;
         //Then
-        Assertions.assertEquals(remainingActions, survivor.getRemainingActions());
+        Assertions.assertEquals(remainingActions, survivor.getAction().getAvailableActions());
     }
 
     @Test
@@ -125,14 +128,12 @@ public class SurvivorShould {
 
     @Test
     public void pickup_item_method_throws_exception() {
-
         //When
         survivor.pickUpEquipmentItem(sword);
         survivor.pickUpEquipmentItem(bat);
         survivor.pickUpEquipmentItem(pan);
         survivor.pickUpEquipmentItem(pistol);
         survivor.pickUpEquipmentItem(water);
-
         //Then
         assertThrows(IllegalStateException.class, () ->
                 survivor.pickUpEquipmentItem(new Molotov("High explosive molotov")), "There is no more space");
@@ -140,16 +141,13 @@ public class SurvivorShould {
 
     @Test
     public void pickup_item() {
-
         //When
         survivor.pickUpEquipmentItem(sword);
         survivor.pickUpEquipmentItem(bat);
         survivor.pickUpEquipmentItem(pan);
         survivor.pickUpEquipmentItem(pistol);
         survivor.pickUpEquipmentItem(water);
-
         int remainingCapacity = 0;
-
         //Then
         Assertions.assertEquals(remainingCapacity, survivor.getEquipmentRemainingCapacity());
     }
@@ -168,7 +166,7 @@ public class SurvivorShould {
         expected.add(pan);
         expected.add(pistol);
         expected.add(water);
-        Assertions.assertEquals(expected, survivor.getEquipmentList());
+        Assertions.assertEquals(expected, survivor.getBagItems());
     }
 
     @Test
@@ -185,7 +183,7 @@ public class SurvivorShould {
         expectedInHand.add(sword);
         expectedInHand.add(pistol);
         //Then
-        Assertions.assertEquals(expectedInHand, survivor.getEquippedItems());
+        Assertions.assertEquals(expectedInHand, survivor.getItemsInHand());
     }
 
     @Test
@@ -205,13 +203,11 @@ public class SurvivorShould {
         List<Equipment> expectedEquippedItem = new ArrayList<>();
         expectedEquippedItem.add(bat);
         expectedEquippedItem.add(sword);
-        Assertions.assertEquals(expectedEquippedItem, survivor.getEquippedItems());
-
+        Assertions.assertEquals(expectedEquippedItem, survivor.getItemsInHand());
     }
 
     @Test
     public void wound_reduce_carrying_capacity() {
-
         //When
         survivor.receiveWound(new BasicWounds().setWounds(1));
         int remainingCapacity = 4;
@@ -234,7 +230,7 @@ public class SurvivorShould {
         expectedItems.add(pistol);
         survivor.receiveWound(new BasicWounds().setWounds(1));
         //Then
-        Assertions.assertEquals(expectedItems, survivor.getEquipmentList());
+        Assertions.assertEquals(expectedItems, survivor.getBagItems());
     }
 
     @Test
@@ -272,43 +268,13 @@ public class SurvivorShould {
         Assertions.assertEquals(expectedExperience, survivor.getExperience());
     }
 
-    @Test
-    public void unlock_skill_action() {
-        //+1 Action" should have one additional Action (a total of 4).
-    }
-
-    @Test
-    public void unlock_skill_hoard() {
-        //skill can carry one additional piece of Equipment
-    }
 
     @Test
     public void survivor_remains_level_red_beyond_43_experience() {
+        for (int i = 0; i < 51; i++) {
+            survivor.attack(new BasicZombie());
+        }
+        Assert.assertEquals(Levels.RED, survivor.getCurrentLevel());
     }
 
-    @Test
-    public void survivor_restarts_skill_tree() {
-        //beyond 43 experience skill tree starts from beginning but remain current unlocked skills
-    }
-
-    @Test
-    public void survivor_skill_tree_reaching_yellow_again() {
-        //43+7=50 experience no more potential skills at second yellow
-    }
-
-    @Test
-    public void survivor_skill_tree_unlocked_orange_again() {
-        //43+18=61 experience second orange skill is unlocked
-    }
-
-    @Test
-    public void survivor_skill_tree_unlocked_red_again() {
-        //43 + 43 = 86 total
-
-    }
-
-    @Test
-    public void survivor_skill_tree_unlocked_last_red() {
-        //43 + 43 + 43 = 129 total
-    }
 }

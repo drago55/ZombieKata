@@ -12,4 +12,6 @@ public interface Bag {
     Stream<Equipment> getItems();
 
     void reduceCapacityAndDropItem();
+
+    void addExtraSlot();
 }

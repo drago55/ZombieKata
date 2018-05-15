@@ -1,5 +1,6 @@
 package survivors;
 
+import actions.Action;
 import actions.Actions;
 import bag.Bag;
 import equipment.Equipment;
@@ -7,6 +8,8 @@ import game.Game;
 import levels.Level;
 import levels.LevelSystem;
 import levels.Levels;
+import skills.Skill;
+import skills.SkillTree;
 import wounds.BasicWounds;
 import wounds.Wounds;
 import zombies.Zombie;
@@ -25,17 +28,18 @@ public class ZombieSurvivor implements Survivor {
     private int experience = 0;
     private int baseDamage = 2;
     private Wounds wounds;
-    private static Actions actions;
+    private Actions actions;
     private Bag bag;
     private List<Equipment> inHand;
     private Level levelSystem;
     private Levels currentLevel;
     private Game game;
+    private Skill skillTree;
 
     public ZombieSurvivor() {
         levelSystem = new LevelSystem();
         currentLevel = Levels.BLUE;
-        actions = Actions.getInstance();
+        actions = new Actions();
         inHand = new ArrayList<>();
     }
 
@@ -94,16 +98,6 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public void doAction() {
-        this.actions.doAction();
-    }
-
-    @Override
-    public int getRemainingActions() {
-        return actions.getRemainingActions();
-    }
-
-    @Override
     public int getEquipmentRemainingCapacity() {
         return bag.getBagFreeSlots();
     }
@@ -115,12 +109,12 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public Set<Equipment> getEquipmentList() {
+    public Set<Equipment> getBagItems() {
         return bag.getItems().collect(Collectors.toSet());
     }
 
     @Override
-    public List<Equipment> getEquippedItems() {
+    public List<Equipment> getItemsInHand() {
         return this.inHand;
     }
 
@@ -144,7 +138,7 @@ public class ZombieSurvivor implements Survivor {
 
     @Override
     public Optional<Equipment> getItemFromEquipmentBag(Equipment itemToEquip) {
-        return getEquipmentList().stream().filter(item -> item == itemToEquip).findAny();
+        return getBagItems().stream().filter(item -> item == itemToEquip).findAny();
     }
 
     @Override
@@ -157,6 +151,7 @@ public class ZombieSurvivor implements Survivor {
         zombie.receiveDamage(new BasicWounds().setWounds(baseDamage));
         if (zombie.isDead()) {
             this.experience++;
+            this.skillTree.updateSkillTree();
             if (levelSystem.isLevelUp(experience)) {
                 this.onLevelUp();
             }
@@ -173,6 +168,30 @@ public class ZombieSurvivor implements Survivor {
         this.game = game;
     }
 
+    @Override
+    public Skill getSkillTree() {
+        return this.skillTree;
+    }
+
+    @Override
+    public Action getAction() {
+        return this.actions;
+    }
+
+    @Override
+    public void setSkillTree(Skill skill) {
+        this.skillTree = skill;
+    }
+
+    @Override
+    public void doAction() {
+        this.actions.doAction();
+    }
+
+    @Override
+    public Bag getBag() {
+        return this.bag;
+    }
 
     @Override
     public void onLevelUp() {

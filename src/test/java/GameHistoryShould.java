@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import skills.SkillTree;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
 import wounds.BasicWounds;
@@ -26,16 +27,18 @@ public class GameHistoryShould {
     private Game game;
     private Survivor survivor;
     private History<String> history;
+    private Names names;
 
     @BeforeEach
     public void init() {
-        Names names = new BasicNames(new SurvivorNames());
+        names = new BasicNames(new SurvivorNames());
         game = new GameData(names);
-        history = game.getGameHistory();
         survivor = new ZombieSurvivor();
         game.addSurvivor(survivor);
-        survivor.setBag(new EquipmentBag());
         survivor.setGame(game);
+        survivor.setSkillTree(new SkillTree(survivor, game));
+        history = game.getGameHistory();
+        survivor.setBag(new EquipmentBag());
         survivor.setWounds(new BasicWounds());
     }
 
@@ -108,7 +111,7 @@ public class GameHistoryShould {
         for (int i = 0; i < 19; i++) {
             survivor.attack(new BasicZombie());
         }
-        String expected = NEW_SKILL + survivor.getName();
-        Assert.assertEquals(expected, history.getLogLine(NEW_SKILL + survivor.getName()));
+        String expected = survivor.getName() + NEW_SKILL + survivor.getSkillTree().getLastSkill();
+        Assert.assertEquals(expected, history.getLogLine(survivor.getName() + NEW_SKILL + survivor.getSkillTree().getLastSkill()));
     }
 }

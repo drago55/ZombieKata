@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import skills.SkillTree;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
 import wounds.BasicWounds;
@@ -25,10 +26,10 @@ public class GameShould {
     private Names names;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         //Given
-         names = new BasicNames(new SurvivorNames());
-         game = new GameData(names);
+        names = new BasicNames(new SurvivorNames());
+        game = new GameData(names);
     }
 
     @AfterEach
@@ -36,6 +37,7 @@ public class GameShould {
         history = game.getGameHistory();
         history.clearLog();
     }
+
     @Test
     public void begin_with_zero_survivors() {
 
@@ -56,7 +58,7 @@ public class GameShould {
 
     @Test
     public void survivors_names_are_unique() {
-         //When
+        //When
         for (int i = 0; i < 20; i++) {
             game.addSurvivor(new ZombieSurvivor());
         }
@@ -67,7 +69,7 @@ public class GameShould {
 
     @Test
     public void game_ends_if_remaining_survivors_are_dead() {
-         //When
+        //When
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
@@ -80,7 +82,7 @@ public class GameShould {
 
     @Test
     public void begin_with_level_blue() {
-          //Then
+        //Then
         Assertions.assertEquals(Levels.BLUE, game.getCurrentGameLevel());
     }
 
@@ -91,6 +93,7 @@ public class GameShould {
         survivor.setBag(new EquipmentBag());
         survivor.setWounds(new BasicWounds());
         game.addSurvivor(survivor);
+        survivor.setSkillTree(new SkillTree(survivor, game));
         game.addSurvivor(new ZombieSurvivor(), new EquipmentBag(), new BasicWounds());
         for (int i = 0; i < 19; i++) {
             survivor.attack(new BasicZombie());

@@ -6,6 +6,7 @@ import equipment.Equipment;
 import game.Game;
 import levels.LevelUp;
 import levels.Levels;
+import skills.Skill;
 import wounds.Wounds;
 import zombies.Zombie;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Survivor extends LevelUp, Action {
+public interface Survivor extends LevelUp{
 
     String getName();
 
@@ -35,9 +36,9 @@ public interface Survivor extends LevelUp, Action {
 
     void pickUpEquipmentItem(Equipment equipmentItem);
 
-    Set<Equipment> getEquipmentList();
+    Set<Equipment> getBagItems();
 
-    List<Equipment> getEquippedItems();
+    List<Equipment> getItemsInHand();
 
     void equip(Equipment item);
 
@@ -52,4 +53,14 @@ public interface Survivor extends LevelUp, Action {
     Levels getCurrentLevel();
 
     void setGame(Game game);
+
+    Skill getSkillTree();
+
+    Action getAction();
+
+    void setSkillTree(Skill skill);
+
+    void doAction();
+
+    Bag getBag();
 }

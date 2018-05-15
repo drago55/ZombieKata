@@ -4,5 +4,7 @@ public interface Action {
 
     void doAction();
 
-    int getRemainingActions();
+    int getAvailableActions();
+
+    void addAdditionalAction();
 }

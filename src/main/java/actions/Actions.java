@@ -2,37 +2,37 @@ package actions;
 
 public class Actions implements Action {
 
-    private int remaining = 3;
-    private static Actions action = null;
+    private int availableActions = 3;
 
-
-    private Actions() {
+    public Actions() {
     }
 
-    public static Actions getInstance() {
-
-        if (action == null) {
-            action = new Actions();
-        }
-        return action;
+    protected Actions(int numberOfAdditionalActions) {
+        this.availableActions += numberOfAdditionalActions;
     }
 
     private void reduceActions() {
-        if (remaining != 0) {
-            remaining -= 1;
+        if (availableActions != 0) {
+            availableActions -= 1;
         }
     }
 
     @Override
     public void doAction() {
-        if (remaining == 0) {
-            throw new IllegalStateException("Can't do more than tree actions");
+        if (availableActions == 0) {
+            throw new IllegalStateException("Can't do more than " + availableActions + " actions per turn!");
         }
         reduceActions();
     }
 
     @Override
-    public int getRemainingActions() {
-        return remaining;
+    public int getAvailableActions() {
+        return availableActions;
     }
+
+    @Override
+    public void addAdditionalAction() {
+        this.availableActions += 1;
+    }
+
 }

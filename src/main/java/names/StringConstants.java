@@ -13,6 +13,6 @@ public class StringConstants {
     public static final String LEVEL_UP = "Level up! ";
     public static final String IS_DEAD = " is dead!";
     public static final String RECEIVED_WOUND = " received a wound of ";
-    public static final String NEW_SKILL=SURVIVOR+"gained new skill ";
+    public static final String NEW_SKILL = " gained new skill ";
 
 }
