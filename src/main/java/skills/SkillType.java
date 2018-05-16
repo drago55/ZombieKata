@@ -2,7 +2,7 @@ package skills;
 
 import survivors.Survivor;
 
-public enum SkillAttributes {
+public enum SkillType {
     ONE_RANGED {
         @Override
         public void updateSurvivor(Survivor survivor) {

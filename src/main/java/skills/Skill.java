@@ -1,22 +1,36 @@
 package skills;
 
-import levels.Levels;
 
-import java.util.Set;
+import survivors.Survivor;
 
-public interface Skill {
+public abstract class Skill {
 
-    Set<SkillAttributes> getListOfSkills();
+    public abstract String getName();
 
-    void updateSkillTree();
+    public abstract boolean isEnabled();
 
-    SkillAttributes getLastSkill();
+    @Override
+    public String toString() {
+        return getName();
+    }
 
-    Set<SkillAttributes> getUnlockedSkills();
+    public abstract void updateSurvivor(Survivor survivor);
 
-    void onSkillUpdate();
-
-    void onSkillTreeRestart();
-
-    Levels getCurrentLevel();
+    public static Skill getSkill(int experience) {
+        switch (experience) {
+            case 7:
+                return new ActionSkill();
+            case 19:
+                return new HoardSkill();
+            case 43:
+                return new OneMeleeSkill();
+            case 62:
+                return new FreeMoveSkill();
+            case 86:
+                return new SniperSkill();
+            case 129:
+                return new ToughSkill();
+        }
+        return new ActionSkill();
+    }
 }

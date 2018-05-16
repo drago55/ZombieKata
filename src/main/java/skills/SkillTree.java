@@ -7,22 +7,22 @@ import levels.Levels;
 import survivors.Survivor;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static names.StringConstants.NEW_SKILL;
 
-public class SkillTree implements Skill {
+public class SkillTree implements Tree {
 
     private Levels currentLevel;
     private Level levelSystem;
-    private SkillLevel skillLevel;
     private int experience = 0;
     private Survivor survivor;
-    private SkillAttributes skillAttributes;
+    private Skill skill;
     private int skillTreeLevelExperience = 0;
-    private Set<SkillAttributes> unlockedSkills;
+    private Set<Skill> unlockedSkills;
     private Game game;
 
     public SkillTree(Survivor survivor, Game game) {
@@ -34,8 +34,8 @@ public class SkillTree implements Skill {
     }
 
     @Override
-    public Set<SkillAttributes> getListOfSkills() {
-        return Stream.of(SkillAttributes.values()).collect(Collectors.toSet());
+    public Set<SkillType> getListOfSkills() {
+        return Stream.of(SkillType.values()).collect(Collectors.toSet());
     }
 
     @Override
@@ -46,14 +46,14 @@ public class SkillTree implements Skill {
     }
 
     @Override
-    public SkillAttributes getLastSkill() {
+    public Skill getLastSkill() {
         long count = unlockedSkills.stream().count();
         long toLastSkill = count - 1 < 0 ? 0 : count - 1;
-        return unlockedSkills.stream().skip(toLastSkill).findAny().orElse(SkillAttributes.EMPTY);
+        return unlockedSkills.stream().skip(toLastSkill).findAny().orElse(new ActionSkill());
     }
 
     @Override
-    public Set<SkillAttributes> getUnlockedSkills() {
+    public Set<Skill> getUnlockedSkills() {
         return this.unlockedSkills;
     }
 
@@ -65,16 +65,14 @@ public class SkillTree implements Skill {
         System.out.println("Current level of SkillTree is  " + currentLevel);
         switch (currentLevel) {
             case YELLOW:
-                unlockAndApplyAction();
+                unlockAndNotify();
                 break;
             case ORANGE:
-                unlockAndApplyHoard();
-                unlockAndApplyFreeMove();
+                unlockAndNotify();
                 break;
             case RED:
-                unlockAndApplyOneMelee();
-                unlockAndApplySniper();
-                unlockAndApplyTough();
+                unlockAndNotify();
+                this.onSkillTreeRestart();
                 break;
             default:
                 break;
@@ -82,61 +80,10 @@ public class SkillTree implements Skill {
 
     }
 
-    private void unlockAndApplyTough() {
-        if (experience == 129) {
-            skillAttributes = SkillAttributes.TOUGH;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-            this.onSkillTreeRestart();
-        }
-    }
-
-    private void unlockAndApplySniper() {
-        if (experience == 86) {
-            skillAttributes = SkillAttributes.SNIPER;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-            this.onSkillTreeRestart();
-        }
-    }
-
-    private void unlockAndApplyOneMelee() {
-        if (experience == 43) {
-            skillAttributes = SkillAttributes.ONE_MELEE;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-            this.onSkillTreeRestart();
-        }
-    }
-
-    private void unlockAndApplyFreeMove() {
-        if (experience == 62) {
-            skillAttributes = SkillAttributes.FREE_MOVE;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-        }
-    }
-
-    private void unlockAndApplyHoard() {
-        if (experience == 19) {
-            skillAttributes = SkillAttributes.HOARD;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-        }
-    }
-
-    private void unlockAndApplyAction() {
-        if (experience == 7) {
-            skillAttributes = SkillAttributes.ACTION;
-            unlockedSkills.add(skillAttributes);
-            skillAttributes.updateSurvivor(survivor);
-            this.game.notify(survivor.getName() + NEW_SKILL + skillAttributes);
-        }
+    private void unlockAndNotify() {
+        skill = Skill.getSkill(experience);
+        unlockedSkills.add(skill);
+        this.game.notify(survivor.getName() + NEW_SKILL + skill.toString());
     }
 
     @Override
@@ -148,5 +95,19 @@ public class SkillTree implements Skill {
     @Override
     public Levels getCurrentLevel() {
         return this.currentLevel;
+    }
+
+    @Override
+    public void enableSkill(Skill skill) {
+        Optional<Skill> optionalOfSkill = unlockedSkills.stream().filter(unlockedSkill -> unlockedSkill.equals(skill)).findFirst();
+        if (optionalOfSkill.isPresent()) {
+            optionalOfSkill.get().updateSurvivor(survivor);
+        }
+        throw new IllegalArgumentException("Skill is not unlocked!");
+    }
+
+    @Override
+    public void enableAll() {
+        unlockedSkills.forEach(skill -> skill.updateSurvivor(survivor));
     }
 }

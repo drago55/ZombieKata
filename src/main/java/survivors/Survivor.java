@@ -6,7 +6,7 @@ import equipment.Equipment;
 import game.Game;
 import levels.LevelUp;
 import levels.Levels;
-import skills.Skill;
+import skills.Tree;
 import wounds.Wounds;
 import zombies.Zombie;
 
@@ -54,11 +54,11 @@ public interface Survivor extends LevelUp{
 
     void setGame(Game game);
 
-    Skill getSkillTree();
+    Tree getSkillTree();
 
     Action getAction();
 
-    void setSkillTree(Skill skill);
+    void setSkillTree(Tree skillTree);
 
     void doAction();
 

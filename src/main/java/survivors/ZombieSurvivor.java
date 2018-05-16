@@ -8,8 +8,7 @@ import game.Game;
 import levels.Level;
 import levels.LevelSystem;
 import levels.Levels;
-import skills.Skill;
-import skills.SkillTree;
+import skills.Tree;
 import wounds.BasicWounds;
 import wounds.Wounds;
 import zombies.Zombie;
@@ -34,7 +33,7 @@ public class ZombieSurvivor implements Survivor {
     private Level levelSystem;
     private Levels currentLevel;
     private Game game;
-    private Skill skillTree;
+    private Tree skillTree;
 
     public ZombieSurvivor() {
         levelSystem = new LevelSystem();
@@ -169,7 +168,7 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public Skill getSkillTree() {
+    public Tree getSkillTree() {
         return this.skillTree;
     }
 
@@ -179,8 +178,8 @@ public class ZombieSurvivor implements Survivor {
     }
 
     @Override
-    public void setSkillTree(Skill skill) {
-        this.skillTree = skill;
+    public void setSkillTree(Tree skillTree) {
+        this.skillTree = skillTree;
     }
 
     @Override
