@@ -9,8 +9,6 @@ import survivors.Survivor;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static names.StringConstants.NEW_SKILL;
 
@@ -31,11 +29,6 @@ public class SkillTree implements Tree {
         this.survivor = survivor;
         this.unlockedSkills = new HashSet<>();
         levelSystem = new LevelSystem();
-    }
-
-    @Override
-    public Set<SkillType> getListOfSkills() {
-        return Stream.of(SkillType.values()).collect(Collectors.toSet());
     }
 
     @Override
@@ -63,16 +56,8 @@ public class SkillTree implements Tree {
     }
 
     @Override
-    public int getNumberOfUnlockedSkills() {
-        return unlockedSkills.size();
-    }
-
-    @Override
     public void onSkillUpdate() {
         currentLevel = levelSystem.getLevel(skillTreeLevelExperience);
-        System.out.println("Total experience " + experience);
-        System.out.println("Experience of skillTree " + skillTreeLevelExperience);
-        System.out.println("Current level of SkillTree is  " + currentLevel);
         switch (currentLevel) {
             case YELLOW:
                 unlockAndNotify();
@@ -112,7 +97,7 @@ public class SkillTree implements Tree {
     @Override
     public void enableSkill(String skill) {
         Optional<Skill> optionalOfSkill = getUnlockedSkill(skill);
-         if (optionalOfSkill.isPresent()) {
+        if (optionalOfSkill.isPresent()) {
             if (optionalOfSkill.get().isEnabled()) {
                 throw new IllegalStateException("This skill is already enabled!");
             }

@@ -64,15 +64,7 @@ public class SkillTreeShould {
     }
 
     @Test
-    public void have_potential_skills() {
-        //We have available skills but they are not unlocked
-        Assertions.assertEquals(Arrays.stream(SkillType.values()).collect(Collectors.toSet()),
-                survivor.getSkillTree().getListOfSkills());
-    }
-
-    @Test
     public void have_unlocked_skill_action() {
-
         for (int i = 0; i < 7; i++) {
             survivor.attack(new BasicZombie());
         }

@@ -7,8 +7,6 @@ import java.util.Set;
 
 public interface Tree {
 
-    Set<SkillType> getListOfSkills();
-
     void updateSkillTree();
 
     Skill getLastSkill();
@@ -16,8 +14,6 @@ public interface Tree {
     Optional<Skill> getUnlockedSkill(String name);
 
     Set<Skill> getUnlockedSkills();
-
-    int getNumberOfUnlockedSkills();
 
     void onSkillUpdate();
 
