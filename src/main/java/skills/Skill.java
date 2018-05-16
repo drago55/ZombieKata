@@ -3,6 +3,8 @@ package skills;
 
 import survivors.Survivor;
 
+import java.util.Optional;
+
 public abstract class Skill {
 
     public abstract String getName();
@@ -16,21 +18,21 @@ public abstract class Skill {
 
     public abstract void updateSurvivor(Survivor survivor);
 
-    public static Skill getSkill(int experience) {
+    public static Optional<Skill> getSkill(int experience) {
         switch (experience) {
             case 7:
-                return new ActionSkill();
+                return Optional.of(new ActionSkill());
             case 19:
-                return new HoardSkill();
+                return Optional.of(new HoardSkill());
             case 43:
-                return new OneMeleeSkill();
+                return Optional.of(new OneMeleeSkill());
             case 62:
-                return new FreeMoveSkill();
+                return Optional.of(new FreeMoveSkill());
             case 86:
-                return new SniperSkill();
+                return Optional.of(new SniperSkill());
             case 129:
-                return new ToughSkill();
+                return Optional.of(new ToughSkill());
         }
-        return new ActionSkill();
+        return Optional.empty();
     }
 }

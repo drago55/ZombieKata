@@ -1,14 +1,10 @@
 package actions;
 
 public class Actions implements Action {
-
+    //TODO implement turn after all actions are spent
     private int availableActions = 3;
 
     public Actions() {
-    }
-
-    protected Actions(int numberOfAdditionalActions) {
-        this.availableActions += numberOfAdditionalActions;
     }
 
     private void reduceActions() {

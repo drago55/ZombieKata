@@ -34,12 +34,9 @@ public class GameHistoryShould {
         names = new BasicNames(new SurvivorNames());
         game = new GameData(names);
         survivor = new ZombieSurvivor();
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
         survivor.setSkillTree(new SkillTree(survivor, game));
         history = game.getGameHistory();
-        survivor.setBag(new EquipmentBag());
-        survivor.setWounds(new BasicWounds());
+        game.addSurvivor(survivor, new EquipmentBag(), new BasicWounds());
     }
 
     @AfterEach

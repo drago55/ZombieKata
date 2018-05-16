@@ -24,7 +24,6 @@ public abstract class Equipment {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(name);
     }
 

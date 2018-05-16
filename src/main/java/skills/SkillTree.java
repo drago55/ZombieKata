@@ -53,8 +53,18 @@ public class SkillTree implements Tree {
     }
 
     @Override
+    public Optional<Skill> getUnlockedSkill(String name) {
+        return unlockedSkills.stream().filter(skill1 -> skill1.getName().equalsIgnoreCase(name)).findAny();
+    }
+
+    @Override
     public Set<Skill> getUnlockedSkills() {
         return this.unlockedSkills;
+    }
+
+    @Override
+    public int getNumberOfUnlockedSkills() {
+        return unlockedSkills.size();
     }
 
     @Override
@@ -77,19 +87,21 @@ public class SkillTree implements Tree {
             default:
                 break;
         }
-
     }
 
     private void unlockAndNotify() {
-        skill = Skill.getSkill(experience);
-        unlockedSkills.add(skill);
-        this.game.notify(survivor.getName() + NEW_SKILL + skill.toString());
+        Optional<Skill> optionalSkill = Skill.getSkill(experience);
+        if (optionalSkill.isPresent()) {
+            skill = optionalSkill.get();
+            unlockedSkills.add(skill);
+            this.game.notify(survivor.getName() + NEW_SKILL + skill.toString());
+        }
     }
 
     @Override
     public void onSkillTreeRestart() {
         this.skillTreeLevelExperience = 0;
-        this.game.notify(survivor.getName() + " has restarted skill tree");
+        this.game.notify(survivor.getName() + " has restarted skill tree.");
     }
 
     @Override
@@ -98,16 +110,20 @@ public class SkillTree implements Tree {
     }
 
     @Override
-    public void enableSkill(Skill skill) {
-        Optional<Skill> optionalOfSkill = unlockedSkills.stream().filter(unlockedSkill -> unlockedSkill.equals(skill)).findFirst();
-        if (optionalOfSkill.isPresent()) {
+    public void enableSkill(String skill) {
+        Optional<Skill> optionalOfSkill = getUnlockedSkill(skill);
+         if (optionalOfSkill.isPresent()) {
+            if (optionalOfSkill.get().isEnabled()) {
+                throw new IllegalStateException("This skill is already enabled!");
+            }
             optionalOfSkill.get().updateSurvivor(survivor);
+            return;
         }
         throw new IllegalArgumentException("Skill is not unlocked!");
     }
 
     @Override
     public void enableAll() {
-        unlockedSkills.forEach(skill -> skill.updateSurvivor(survivor));
+        unlockedSkills.stream().filter(filterSkill -> !filterSkill.isEnabled()).forEach(skill -> skill.updateSurvivor(survivor));
     }
 }

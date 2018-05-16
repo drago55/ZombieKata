@@ -2,6 +2,7 @@ package skills;
 
 import levels.Levels;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface Tree {
@@ -12,7 +13,11 @@ public interface Tree {
 
     Skill getLastSkill();
 
+    Optional<Skill> getUnlockedSkill(String name);
+
     Set<Skill> getUnlockedSkills();
+
+    int getNumberOfUnlockedSkills();
 
     void onSkillUpdate();
 
@@ -20,7 +25,7 @@ public interface Tree {
 
     Levels getCurrentLevel();
 
-    void enableSkill(Skill skill);
+    void enableSkill(String skill);
 
     void enableAll();
 

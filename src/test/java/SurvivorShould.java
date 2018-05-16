@@ -41,11 +41,8 @@ public class SurvivorShould {
         Names names = new BasicNames(new SurvivorNames());
         game = new GameData(names);
         survivor = new ZombieSurvivor();
-        survivor.setBag(new EquipmentBag());
-        survivor.setWounds(new BasicWounds());
-        survivor.setGame(game);
-        game.addSurvivor(survivor);
         survivor.setSkillTree(new SkillTree(survivor, game));
+        game.addSurvivor(survivor, new EquipmentBag(), new BasicWounds());
 
         //When
         sword = new Sword("Katana");

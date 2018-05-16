@@ -1,3 +1,4 @@
+import bag.Bag;
 import bag.EquipmentBag;
 import equipment.*;
 import game.Game;
@@ -12,11 +13,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import skills.SkillType;
-import skills.SkillTree;
+import skills.*;
 import survivors.Survivor;
 import survivors.ZombieSurvivor;
 import wounds.BasicWounds;
+import wounds.Wounds;
 import zombies.BasicZombie;
 
 import java.util.Arrays;
@@ -34,6 +35,8 @@ public class SkillTreeShould {
     private Equipment water;
     private Names names;
     private History history;
+    private Bag equipmentBag;
+    private Wounds wounds;
 
     @BeforeEach
     public void init() {
@@ -41,12 +44,10 @@ public class SkillTreeShould {
         names = new BasicNames(new SurvivorNames());
         game = new GameData(names);
         survivor = new ZombieSurvivor();
-        game.addSurvivor(survivor);
-        survivor.setGame(game);
         survivor.setSkillTree(new SkillTree(survivor, game));
-        survivor.setBag(new EquipmentBag());
-        survivor.setWounds(new BasicWounds());
-
+        equipmentBag = new EquipmentBag();
+        wounds = new BasicWounds();
+        game.addSurvivor(survivor, equipmentBag, wounds);
         //Given items
         sword = new Sword("Katana");
         bat = new BaseballBat("Strong baseball Bat");
@@ -54,7 +55,6 @@ public class SkillTreeShould {
         pistol = new Pistol("9mm");
         molotov = new Molotov("High explosive molotov");
         water = new BottledWater("Large water");
-
     }
 
     @AfterEach
@@ -66,7 +66,8 @@ public class SkillTreeShould {
     @Test
     public void have_potential_skills() {
         //We have available skills but they are not unlocked
-        Assertions.assertEquals(Arrays.stream(SkillType.values()).collect(Collectors.toSet()), survivor.getSkillTree().getListOfSkills());
+        Assertions.assertEquals(Arrays.stream(SkillType.values()).collect(Collectors.toSet()),
+                survivor.getSkillTree().getListOfSkills());
     }
 
     @Test
@@ -75,7 +76,7 @@ public class SkillTreeShould {
         for (int i = 0; i < 7; i++) {
             survivor.attack(new BasicZombie());
         }
-        Assertions.assertEquals(SkillType.ACTION, survivor.getSkillTree().getLastSkill());
+        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkill("Action").isPresent());
     }
 
     @Test
@@ -104,9 +105,9 @@ public class SkillTreeShould {
         for (int i = 0; i < 129; i++) {
             survivor.attack(new BasicZombie());
         }
-        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.SNIPER));
-        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.TOUGH));
-        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.ONE_MELEE));
+        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkill("Sniper").isPresent());
+        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkill("Tough").isPresent());
+        Assertions.assertTrue(survivor.getSkillTree().getUnlockedSkill("OneMelee").isPresent());
     }
 
 
@@ -117,13 +118,13 @@ public class SkillTreeShould {
         }
         int expectedNumberOfSkills = 1;
         Assertions.assertEquals(expectedNumberOfSkills, survivor.getSkillTree().getUnlockedSkills().stream()
-                .filter((skillAttributes) -> skillAttributes.equals(SkillType.ACTION))
+                .filter((skill) -> skill.getName().equalsIgnoreCase("Action"))
                 .count());
     }
 
     @Test
     public void start_without_skills() {
-        Assert.assertEquals(SkillType.EMPTY, survivor.getSkillTree().getLastSkill());
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().isEmpty());
     }
 
     @Test
@@ -133,17 +134,17 @@ public class SkillTreeShould {
             survivor.attack(new BasicZombie());
         }
         int expectedNumberOfActions = 4;
+        survivor.getSkillTree().enableAll();
         Assert.assertEquals(expectedNumberOfActions, survivor.getAction().getAvailableActions());
     }
 
     @Test
     public void unlock_skill_hoard() {
-        //skill can carry one additional piece of Equipment
         //Hoard is unlocked on ORANGE level one
         for (int i = 0; i < 19; i++) {
             survivor.attack(new BasicZombie());
         }
-        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.HOARD));
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkill("Hoard").isPresent());
     }
 
     @Test
@@ -153,7 +154,31 @@ public class SkillTreeShould {
         for (int i = 0; i < 19; i++) {
             survivor.attack(new BasicZombie());
         }
+        survivor.getSkillTree().enableAll();
         Assert.assertTrue(survivor.getBagItems().contains(sword));
+    }
+
+    @Test
+    public void enable_all_skills() {
+        for (int i = 0; i < 19; i++) {
+            survivor.attack(new BasicZombie());
+        }
+        survivor.getSkillTree().enableAll();
+        int expectedNumbOfEnabledSkills = 2;
+        Assert.assertEquals(expectedNumbOfEnabledSkills, survivor.getSkillTree().getUnlockedSkills()
+                .stream().filter(skill -> skill.isEnabled()).count());
+    }
+
+    @Test
+    public void enable_only_one_skill() {
+        for (int i = 0; i < 19; i++) {
+            survivor.attack(new BasicZombie());
+        }
+        survivor.getSkillTree().enableSkill("Action");
+        int expectedNumbOfEnabledSkills = 1;
+        Assert.assertEquals(expectedNumbOfEnabledSkills, survivor.getSkillTree().getUnlockedSkills()
+                .stream().filter(skill -> skill.isEnabled()).count());
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkill("Action").get().isEnabled());
     }
 
     @Test
@@ -164,6 +189,7 @@ public class SkillTreeShould {
             survivor.attack(new BasicZombie());
         }
         int expectedCarryingCapacity = 6;
+        survivor.getSkillTree().enableAll();
         Assert.assertEquals(expectedCarryingCapacity, survivor.getEquipmentRemainingCapacity());
     }
 
@@ -182,12 +208,10 @@ public class SkillTreeShould {
         for (int i = 0; i < 51; i++) {
             survivor.attack(new BasicZombie());
         }
-        //Should have skill action
-        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.ACTION));
-        //Have only one additional action total of 4
-        Assertions.assertEquals(4, survivor.getAction().getAvailableActions());
-        //total 3 skills
-        Assertions.assertEquals(3, survivor.getSkillTree().getUnlockedSkills().size());
+        //Should have only one skill action
+        int expectedNumberOfSkills = 1;
+        Assert.assertEquals(expectedNumberOfSkills, survivor.getSkillTree().getUnlockedSkills()
+                .stream().filter(skill -> skill.getName().equalsIgnoreCase("Action")).count());
     }
 
     @Test
@@ -197,7 +221,7 @@ public class SkillTreeShould {
             survivor.attack(new BasicZombie());
         }
         Assert.assertTrue(survivor.getSkillTree()
-                .getUnlockedSkills().contains(SkillType.FREE_MOVE));
+                .getUnlockedSkill("FreeMove").isPresent());
     }
 
     @Test
@@ -206,7 +230,7 @@ public class SkillTreeShould {
         for (int i = 0; i < 43; i++) {
             survivor.attack(new BasicZombie());
         }
-        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.ONE_MELEE));
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkill("OneMelee").isPresent());
     }
 
     @Test
@@ -216,7 +240,7 @@ public class SkillTreeShould {
             survivor.attack(new BasicZombie());
         }
         survivor.getSkillTree().getUnlockedSkills().stream().forEach(System.out::println);
-        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.SNIPER));
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkill("Sniper").isPresent());
     }
 
     @Test
@@ -225,6 +249,6 @@ public class SkillTreeShould {
         for (int i = 0; i < 129; i++) {
             survivor.attack(new BasicZombie());
         }
-        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkills().contains(SkillType.TOUGH));
+        Assert.assertTrue(survivor.getSkillTree().getUnlockedSkill("Tough").isPresent());
     }
 }
